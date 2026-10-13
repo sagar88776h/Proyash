@@ -41,6 +41,8 @@ function VolunteerForm() {
   const [result, setResult] = useState<'created' | 'already_registered' | 'received' | null>(null);
   const form = useForm<FormInput, unknown, FormOutput>({
     resolver: zodResolver(volunteerSchema),
+    // The error summary takes focus and lists every problem, including radio groups.
+    shouldFocusError: false,
     defaultValues: {
       full_name: '',
       phone: '',

@@ -33,6 +33,8 @@ export function NewRequestPage() {
   const [duplicate, setDuplicate] = useState<string | null>(null);
   const form = useForm<Input, unknown, Output>({
     resolver: zodResolver(staffSchema),
+    // The error summary takes focus and lists every problem, including radio groups.
+    shouldFocusError: false,
     defaultValues: {
       urgency: 'standard',
       relationship: 'self',

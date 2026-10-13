@@ -129,6 +129,8 @@ export function RequestStatusPage() {
   const [followUpSent, setFollowUpSent] = useState(false);
   const form = useForm<LookupInput, unknown, LookupOutput>({
     resolver: zodResolver(statusLookupSchema),
+    // The error summary takes focus and lists every problem, including radio groups.
+    shouldFocusError: false,
     defaultValues: { reference_code: '', phone: '' },
   });
   const submission = useFormSubmission(form.setError);

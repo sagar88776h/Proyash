@@ -140,6 +140,8 @@ function ReportForm() {
   const [result, setResult] = useState<'created' | 'already_reported' | 'received' | null>(null);
   const form = useForm<FormInput, unknown, FormOutput>({
     resolver: zodResolver(donationReportSchema),
+    // The error summary takes focus and lists every problem, including radio groups.
+    shouldFocusError: false,
     defaultValues: {
       amount: '',
       paid_on: todayISO(),

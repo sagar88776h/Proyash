@@ -123,6 +123,8 @@ function RequestForm() {
 
   const form = useForm<FormInput, unknown, FormOutput>({
     resolver: zodResolver(assistanceRequestSchema),
+    // The error summary takes focus and lists every problem, including radio groups.
+    shouldFocusError: false,
     defaultValues: {
       category: undefined,
       urgency: 'standard',

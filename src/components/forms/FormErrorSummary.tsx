@@ -14,11 +14,18 @@ type Props = {
  */
 export function FormErrorSummary({ errors, attempt, title = 'Please correct the following' }: Props) {
   const ref = useRef<HTMLDivElement>(null);
+  const focusedAttempt = useRef(0);
+  // Errors can arrive in a later render than the attempt counter, so focus the
+  // summary once per failed attempt, as soon as it has something to show.
   useEffect(() => {
-    if (attempt > 0 && errors.length > 0) ref.current?.focus();
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- focus only when a new submit attempt fails
-  }, [attempt]);
-  if (errors.length === 0) return null;
+    if (attempt > focusedAttempt.current && errors.length > 0) {
+      focusedAttempt.current = attempt;
+      ref.current?.focus();
+    }
+  });
+  // Inline messages guide people while they fill in the form; the summary
+  // appears only after they try to submit.
+  if (attempt === 0 || errors.length === 0) return null;
   return (
     <div
       ref={ref}

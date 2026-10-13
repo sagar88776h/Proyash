@@ -54,12 +54,15 @@ export function SiteHeader() {
           </ul>
         </nav>
         <div className="flex items-center gap-2">
-          <ButtonLink to="/request-help" size="sm" variant={scrolled ? 'secondary' : 'light'} className="hidden sm:inline-flex">
-            Request help
-          </ButtonLink>
-          <ButtonLink to="/support-us" size="sm" variant="gold" className="hidden sm:inline-flex">
-            Support us
-          </ButtonLink>
+          {/* Wrapped so the display utility is not overridden by the button's own inline-flex. */}
+          <div className="hidden items-center gap-2 sm:flex">
+            <ButtonLink to="/request-help" size="sm" variant={scrolled ? 'secondary' : 'light'}>
+              Request help
+            </ButtonLink>
+            <ButtonLink to="/support-us" size="sm" variant="gold">
+              Support us
+            </ButtonLink>
+          </div>
           <button
             ref={menuButtonRef}
             type="button"

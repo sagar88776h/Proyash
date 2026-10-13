@@ -56,6 +56,8 @@ function ContactForm() {
   const [sent, setSent] = useState(false);
   const form = useForm<FormInput, unknown, FormOutput>({
     resolver: zodResolver(contactSchema),
+    // The error summary takes focus and lists every problem, including radio groups.
+    shouldFocusError: false,
     defaultValues: { name: '', email: '', phone: '', subject: '', message: '' },
     mode: 'onTouched',
   });
