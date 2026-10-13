@@ -6,6 +6,30 @@
 --   select private.assert_security_invariants();
 -- =============================================================================
 
+-- Some Supabase projects ship helper functions in `public` (for example the
+-- event-trigger function behind "automatically enable RLS"). Event-trigger
+-- functions cannot be called through the API, but remove the default execute
+-- grant anyway where we are allowed to. Failure here is not fatal: the
+-- function may belong to a Supabase-managed role.
+do $$
+declare
+  r record;
+begin
+  for r in
+    select p.oid::regprocedure as fn
+    from pg_proc p
+    join pg_namespace n on n.oid = p.pronamespace
+    where n.nspname = 'public' and p.prorettype = 'event_trigger'::regtype
+  loop
+    begin
+      execute format('revoke execute on function %s from public, anon, authenticated', r.fn);
+    exception when insufficient_privilege then
+      raise notice 'Could not revoke execute on % (owned by a Supabase-managed role); it cannot be called through the API.', r.fn;
+    end;
+  end loop;
+end;
+$$;
+
 create function private.assert_security_invariants()
 returns void
 language plpgsql
@@ -39,11 +63,14 @@ begin
   end loop;
 
   -- 3. Anonymous visitors can execute only the allow-listed public functions.
+  --    Event-trigger functions are skipped: Postgres refuses to call them
+  --    directly, so they cannot be reached through the API.
   for r in
     select p.oid::regprocedure::text as fn, p.proname
     from pg_proc p
     join pg_namespace n on n.oid = p.pronamespace
     where n.nspname = 'public'
+      and p.prorettype <> 'event_trigger'::regtype
       and has_function_privilege('anon', p.oid, 'execute')
       and not (p.proname = any (v_anon_allowed))
   loop
@@ -69,6 +96,7 @@ begin
     join pg_namespace n on n.oid = p.pronamespace
     where n.nspname in ('public', 'private')
       and p.prosecdef
+      and p.prorettype <> 'event_trigger'::regtype
       and not exists (
         select 1 from unnest(coalesce(p.proconfig, '{}')) c where c like 'search_path=%'
       )
