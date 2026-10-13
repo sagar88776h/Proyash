@@ -45,5 +45,10 @@ export default tseslint.config(
     languageOptions: { globals: globals.node },
     rules: { 'no-console': 'off' },
   },
+  {
+    // Tests inspect arbitrary JSON responses.
+    files: ['tests/**/*.ts'],
+    rules: { '@typescript-eslint/no-explicit-any': 'off' },
+  },
   prettier,
 );
