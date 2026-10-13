@@ -24,6 +24,7 @@ import { usePublicSettings } from '@/hooks/useSettings';
 import { callFunction } from '@/lib/api/functions';
 import type { DonationSettings } from '@/lib/api/public';
 import { isBackendConfigured } from '@/lib/env';
+import { NotConnectedNotice } from '@/components/forms/NotConnectedNotice';
 import { todayISO } from '@/lib/format';
 import { useFormMeta } from '@/lib/submission';
 import { donationReportSchema, MAX_UPLOAD_BYTES } from '@shared/validation.ts';
@@ -358,6 +359,7 @@ function ReportForm() {
           Send donation report
         </Button>
       </div>
+      <NotConnectedNotice title="Online donation reports are not available yet" />
     </form>
   );
 }

@@ -1,6 +1,6 @@
 # PRAYASH — Implementation Plan
 
-_Status: living document. Updated as phases complete._
+_Status: all eight phases implemented and verified (2026-10-13). Test results: [`docs/TESTING.md`](TESTING.md); remaining external items: [`docs/LAUNCH_CHECKLIST.md`](LAUNCH_CHECKLIST.md)._
 
 ## 1. Inspection findings (2026-10-13)
 
@@ -62,22 +62,22 @@ Full matrix: `docs/SECURITY.md`.
 
 ## 4. Phases
 
-| Phase | Scope | Verification |
-| --- | --- | --- |
-| 1 | Plan, scaffold (Vite/React/TS/Tailwind v4), design tokens, UI primitives, tooling | typecheck, lint, build |
-| 2 | Public website: 10 pages, responsive nav, footer, reveals/parallax, hero visual with WebGL + reduced-motion fallbacks | Playwright (desktop/tablet/mobile), axe |
-| 3 | Schema & migrations, RLS, roles, audit, storage policies; Docker-free local Supabase stack for tests | SQL/RLS tests per role through PostgREST |
-| 4 | Assistance + volunteer workflows (public-api edge function, admin review) | function + DB tests, e2e |
-| 5 | Villages, projects, outcomes, media consent/publishing, volunteer assignment | DB + e2e |
-| 6 | Ledger, verification, receipts, reconciliation, monthly/annual reports, public reports | ledger calculation tests |
-| 7 | Admin overview, content publishing, settings, messages, users/roles, audit history | e2e per role |
-| 8 | Full test pass, performance, docs, deployment guide | actual results in `docs/TESTING.md` |
+| Phase | Scope | Verification | Status |
+| --- | --- | --- | --- |
+| 1 | Plan, scaffold (Vite/React/TS/Tailwind v4), design tokens, UI primitives, tooling | typecheck, lint, build | Done |
+| 2 | Public website: 10 pages, responsive nav, footer, reveals/parallax, hero visual with WebGL + reduced-motion fallbacks | Playwright (desktop/tablet/mobile), axe | Done |
+| 3 | Schema & migrations, RLS, roles, audit, storage policies; Docker-free local Supabase stack for tests | SQL/RLS tests per role through PostgREST | Done |
+| 4 | Assistance + volunteer workflows (public-api edge function, admin review) | function + DB tests, e2e | Done |
+| 5 | Villages, projects, outcomes, media consent/publishing, volunteer assignment | DB + e2e | Done |
+| 6 | Ledger, verification, receipts, reconciliation, monthly/annual reports, public reports | ledger calculation tests, e2e | Done |
+| 7 | Admin overview, content publishing, settings, messages, users/roles, audit history, MFA | e2e per role | Done |
+| 8 | Full test pass, performance, docs, deployment guide | actual results in `docs/TESTING.md` | Done |
 
 The schema (phase 3) is built before the public site is wired to live data so that the frontend is typed against the real database. Phases are committed separately.
 
 ## 5. Testing environment note
 
-Docker images cannot be pulled in the build environment (network policy), so `supabase start` is unavailable there. Tests run against a **Docker-free local stack** assembled from the official binaries — PostgreSQL 16, Supabase Auth (GoTrue) and PostgREST — behind a small gateway that mimics Supabase's URL layout (`scripts/local-stack/`). Supabase Storage's HTTP service is not part of that stack; storage *policies* are tested directly in SQL. Anything that could not be exercised is listed in `docs/TESTING.md`.
+Docker images cannot be pulled in the build environment (network policy), so `supabase start` is unavailable there. Tests run against a **Docker-free local stack** assembled from the official binaries — PostgreSQL, Supabase Auth (GoTrue v2.177.0) and PostgREST v12.2.12 — behind a small gateway that mimics Supabase's URL layout, plus a mail catcher, Deno for the Edge Functions, and a filesystem Storage emulator that enforces the real `storage.objects` RLS policies by running each request's SQL as the caller (`scripts/local-stack/`). The emulator is not Supabase's Storage service; differences are listed in `docs/TESTING.md`.
 
 ## 6. External approvals and inputs required before launch
 

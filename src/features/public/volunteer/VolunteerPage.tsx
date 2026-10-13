@@ -21,6 +21,7 @@ import { useContent } from '@/content/useContent';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { callFunction } from '@/lib/api/functions';
 import { isBackendConfigured } from '@/lib/env';
+import { NotConnectedNotice } from '@/components/forms/NotConnectedNotice';
 import {
   ACTIVITY_CATEGORY_LABELS,
   AVAILABILITY_LABELS,
@@ -328,6 +329,7 @@ function VolunteerForm() {
             Register as a volunteer
           </Button>
         </div>
+        <NotConnectedNotice title="Online volunteer registration is not available yet" />
       </div>
     </form>
   );

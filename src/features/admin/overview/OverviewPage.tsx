@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { CheckCircle2, Circle, ShieldAlert } from 'lucide-react';
+import { CheckCircle2, Circle } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';
 import { QueryState } from '@/components/QueryState';
@@ -210,14 +210,6 @@ export function OverviewPage() {
           </Card>
         )}
       </div>
-
-      {auth.roles.length === 0 && (
-        <EmptyState
-          icon={<ShieldAlert aria-hidden="true" className="size-6" />}
-          title="No role assigned"
-          description="Your account does not have a role yet. Ask an administrator to assign one."
-        />
-      )}
     </>
   );
 }

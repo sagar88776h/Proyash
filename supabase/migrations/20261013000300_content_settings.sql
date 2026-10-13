@@ -223,7 +223,7 @@ create table public.site_content (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
-comment on table public.site_content is 'Page content overrides. The frontend falls back to documented defaults (src/content/defaults.ts) for anything not published here.';
+comment on table public.site_content is 'Page content overrides. The frontend falls back to documented defaults (src/content/registry.ts) for anything not published here.';
 
 create table public.site_content_versions (
   id bigint generated always as identity primary key,

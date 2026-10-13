@@ -20,6 +20,7 @@ import { usePublicSettings } from '@/hooks/useSettings';
 import { callFunction } from '@/lib/api/functions';
 import { telLink, whatsappLink } from '@/lib/contact';
 import { isBackendConfigured } from '@/lib/env';
+import { NotConnectedNotice } from '@/components/forms/NotConnectedNotice';
 import { useFormMeta } from '@/lib/submission';
 import { contactSchema } from '@shared/validation.ts';
 
@@ -161,6 +162,7 @@ function ContactForm() {
           Send message
         </Button>
       </div>
+      <NotConnectedNotice title="Online messages are not available yet" />
     </form>
   );
 }

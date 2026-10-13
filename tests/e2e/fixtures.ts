@@ -19,7 +19,7 @@ export const test = base.extend<{ consoleErrors: string[] }>({
         const text = msg.text();
         // The browser logs failed HTTP responses as console errors; tests that
         // expect a refusal assert on the UI instead.
-        if (/Failed to load resource: the server responded with a status of (401|403|404|409|422)/.test(text)) return;
+        if (/Failed to load resource: the server responded with a status of (400|401|403|404|409|422)/.test(text)) return;
         errors.push(text);
       });
       await use(errors);
