@@ -203,6 +203,7 @@ type ChoiceGroupProps = {
   onChange: (value: string | string[]) => void;
   columns?: 1 | 2 | 3;
   className?: string;
+  id?: string;
 };
 
 /** Fieldset of radio buttons or checkboxes rendered as selectable cards. */
@@ -218,6 +219,7 @@ export function ChoiceGroup({
   onChange,
   columns = 2,
   className,
+  id,
 }: ChoiceGroupProps) {
   const generated = useId();
   const base = `g${generated.replace(/:/g, '')}`;
@@ -238,7 +240,8 @@ export function ChoiceGroup({
 
   return (
     <fieldset
-      className={cn('flex flex-col gap-2', className)}
+      id={id}
+      className={cn('flex scroll-mt-32 flex-col gap-2', className)}
       aria-describedby={[hintId, errorId].filter(Boolean).join(' ') || undefined}
       aria-invalid={error ? true : undefined}
     >

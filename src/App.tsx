@@ -1,11 +1,18 @@
-import { Button } from '@/components/ui/Button';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { LazyMotion } from 'framer-motion';
+import { RouterProvider } from 'react-router';
+import { queryClient } from '@/lib/query';
+import { router } from '@/router';
+
+// Animation features load asynchronously so they stay off the critical path.
+const loadMotionFeatures = () => import('@/lib/motionFeatures').then((m) => m.default);
 
 export function App() {
   return (
-    <main className="mx-auto max-w-page p-8">
-      <p className="eyebrow">PRAYASH</p>
-      <h1 className="text-display-xl font-semibold text-forest-700">Together for Humanity.</h1>
-      <Button className="mt-6">Scaffold check</Button>
-    </main>
+    <QueryClientProvider client={queryClient}>
+      <LazyMotion features={loadMotionFeatures} strict>
+        <RouterProvider router={router} />
+      </LazyMotion>
+    </QueryClientProvider>
   );
 }

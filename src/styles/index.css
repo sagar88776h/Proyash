@@ -261,6 +261,16 @@
   }
 }
 
+@keyframes scrollcue {
+  0% {
+    transform: translateY(-110%);
+  }
+  65%,
+  100% {
+    transform: translateY(210%);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -274,6 +284,10 @@
 @media print {
   .no-print {
     display: none !important;
+  }
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
   }
   body {
     background: #fff;

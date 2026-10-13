@@ -127,7 +127,7 @@ for (const fn of functions) {
   });
   const firstDefault = inputs.length - fn.ndefaults;
   out.push(`      ${fn.name}: {`);
-  if (inputs.length === 0) out.push('        Args: never;');
+  if (inputs.length === 0) out.push('        Args: Record<PropertyKey, never>;');
   else {
     out.push('        Args: {');
     inputs.forEach((a, i) => out.push(`          ${a.name}${i >= firstDefault ? '?' : ''}: ${tsType(a.type)} | null;`));

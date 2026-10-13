@@ -1649,6 +1649,10 @@ export type Database = {
     };
     Views: { [_ in never]: never };
     Functions: {
+      admin_list_mfa_status: {
+        Args: Record<PropertyKey, never>;
+        Returns: { user_id: string | null; has_mfa: boolean | null }[];
+      };
       admin_set_user_active: {
         Args: {
           p_user_id: string | null;
@@ -1792,6 +1796,12 @@ export type Database = {
         };
         Returns: Json;
       };
+      finance_project_position: {
+        Args: {
+          p_project_id: string | null;
+        };
+        Returns: Json;
+      };
       finance_publish_report: {
         Args: {
           p_report_id: string | null;
@@ -1926,7 +1936,7 @@ export type Database = {
         Returns: Json;
       };
       get_public_impact_summary: {
-        Args: never;
+        Args: Record<PropertyKey, never>;
         Returns: Json;
       };
       link_volunteer_account: {
@@ -1963,7 +1973,7 @@ export type Database = {
         Returns: undefined;
       };
       my_roles: {
-        Args: never;
+        Args: Record<PropertyKey, never>;
         Returns: Database['public']['Enums']['app_role'][];
       };
       publish_site_content: {
