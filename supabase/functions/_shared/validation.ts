@@ -85,6 +85,15 @@ const optionalVillageField = z
   .optional()
   .transform((v) => (v ? v : null));
 
+/**
+ * Cross-field checks normally run only after every field is valid, so people
+ * would discover them one round at a time. This runs a check as soon as the
+ * fields it reads are themselves valid.
+ */
+function whenValid(...fields: string[]) {
+  return (payload: z.core.ParsePayload) => !payload.issues.some((i) => fields.includes(String(i.path?.[0])));
+}
+
 /** Anti-abuse fields sent with every public form (not shown to people). */
 export const formMetaSchema = z.object({
   client_submission_id: z.uuid(),
@@ -120,10 +129,12 @@ export const assistanceRequestSchema = z
   .refine((d) => d.village_id || (d.locality && d.locality.length >= 2), {
     path: ['locality'],
     message: 'Choose your village or type the name of your village or locality.',
+    when: whenValid('village_id', 'locality'),
   })
   .refine((d) => d.preferred_contact !== 'email' || !!d.email, {
     path: ['email'],
     message: 'Add an email address if you would like to be contacted by email.',
+    when: whenValid('preferred_contact', 'email'),
   });
 
 export const statusLookupSchema = z.object({
@@ -169,14 +180,17 @@ export const volunteerSchema = z
   .refine((d) => d.village_id || (d.locality && d.locality.length >= 2), {
     path: ['locality'],
     message: 'Choose your village or type the name of your village or locality.',
+    when: whenValid('village_id', 'locality'),
   })
   .refine((d) => d.is_adult || (d.guardian_name && d.guardian_name.length >= 2), {
     path: ['guardian_name'],
     message: "Volunteers under 18 need a parent or guardian's name.",
+    when: whenValid('is_adult', 'guardian_name'),
   })
   .refine((d) => d.is_adult || !!d.guardian_phone, {
     path: ['guardian_phone'],
     message: "Volunteers under 18 need a parent or guardian's phone number.",
+    when: whenValid('is_adult', 'guardian_phone'),
   });
 
 export const contactSchema = z
@@ -191,7 +205,11 @@ export const contactSchema = z
       .min(10, 'Please write at least 10 characters.')
       .max(4000, 'Please keep your message under 4000 characters.'),
   })
-  .refine((d) => !!d.email || !!d.phone, { path: ['email'], message: 'Give an email address or phone number so we can reply.' });
+  .refine((d) => !!d.email || !!d.phone, {
+    path: ['email'],
+    message: 'Give an email address or phone number so we can reply.',
+    when: whenValid('email', 'phone'),
+  });
 
 function isoDate(value: string): Date | null {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
@@ -229,10 +247,12 @@ export const donationReportSchema = z
   .refine((d) => d.is_anonymous || (d.donor_name && d.donor_name.length >= 2), {
     path: ['donor_name'],
     message: 'Enter your name, or choose to donate anonymously.',
+    when: whenValid('is_anonymous', 'donor_name'),
   })
   .refine((d) => !!d.donor_phone || !!d.donor_email, {
     path: ['donor_phone'],
     message: 'Give a phone number or email so the treasurer can contact you if needed.',
+    when: whenValid('donor_phone', 'donor_email'),
   });
 
 export type AssistanceRequestInput = z.input<typeof assistanceRequestSchema>;

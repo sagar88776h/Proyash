@@ -116,23 +116,25 @@ function threeDigits(n: number): string {
 export function amountInWordsINR(amount: number): string {
   if (!Number.isFinite(amount) || amount < 0) return '';
   const totalPaise = Math.round(amount * 100);
-  let rupees = Math.floor(totalPaise / 100);
+  const rupees = Math.floor(totalPaise / 100);
   const paise = totalPaise % 100;
-
-  const parts: string[] = [];
-  const crore = Math.floor(rupees / 10_000_000);
-  rupees %= 10_000_000;
-  const lakh = Math.floor(rupees / 100_000);
-  rupees %= 100_000;
-  const thousand = Math.floor(rupees / 1000);
-  rupees %= 1000;
-
-  if (crore) parts.push(`${crore >= 100 ? threeDigits(crore) : twoDigits(crore)} Crore`);
-  if (lakh) parts.push(`${twoDigits(lakh)} Lakh`);
-  if (thousand) parts.push(`${twoDigits(thousand)} Thousand`);
-  if (rupees) parts.push(threeDigits(rupees));
-
-  const rupeeWords = parts.length ? parts.join(' ') : 'Zero';
+  const rupeeWords = rupees ? indianWords(rupees) : 'Zero';
   const paiseWords = paise ? ` and ${twoDigits(paise)} Paise` : '';
   return `Rupees ${rupeeWords}${paiseWords} Only`;
+}
+
+/** Whole number in words with lakh/crore grouping (crores may themselves be large). */
+function indianWords(n: number): string {
+  const crore = Math.floor(n / 10_000_000);
+  let rest = n % 10_000_000;
+  const lakh = Math.floor(rest / 100_000);
+  rest %= 100_000;
+  const thousand = Math.floor(rest / 1000);
+  rest %= 1000;
+  const parts: string[] = [];
+  if (crore) parts.push(`${indianWords(crore)} Crore`);
+  if (lakh) parts.push(`${twoDigits(lakh)} Lakh`);
+  if (thousand) parts.push(`${twoDigits(thousand)} Thousand`);
+  if (rest) parts.push(threeDigits(rest));
+  return parts.join(' ');
 }

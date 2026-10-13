@@ -405,11 +405,11 @@ export function SettingsPage() {
       <QueryState query={query}>
         {({ values, meta }) => (
           <div className="flex flex-col gap-6">
-            {values.contact && <ContactForm key={meta.contact?.updated_at} value={values.contact} meta={meta.contact} />}
-            {values.donation && <DonationForm key={meta.donation?.updated_at} value={values.donation} meta={meta.donation} />}
-            {values.organisation && <OrganisationForm key={meta.organisation?.updated_at} value={values.organisation} meta={meta.organisation} />}
-            {values.social && <SocialForm key={meta.social?.updated_at} value={values.social} meta={meta.social} />}
-            {values['finance.controls'] && <FinanceControlsForm key={meta['finance.controls']?.updated_at} value={values['finance.controls']} meta={meta['finance.controls']} />}
+            {values.contact && <ContactForm key={`contact-${meta.contact?.updated_at}`} value={values.contact} meta={meta.contact} />}
+            {values.donation && <DonationForm key={`donation-${meta.donation?.updated_at}`} value={values.donation} meta={meta.donation} />}
+            {values.organisation && <OrganisationForm key={`organisation-${meta.organisation?.updated_at}`} value={values.organisation} meta={meta.organisation} />}
+            {values.social && <SocialForm key={`social-${meta.social?.updated_at}`} value={values.social} meta={meta.social} />}
+            {values['finance.controls'] && <FinanceControlsForm key={`finance-${meta['finance.controls']?.updated_at}`} value={values['finance.controls']} meta={meta['finance.controls']} />}
           </div>
         )}
       </QueryState>

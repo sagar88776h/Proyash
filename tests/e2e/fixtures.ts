@@ -42,7 +42,7 @@ export async function signInAs(page: Page, roles: AppRole[], label = 'staff'): P
   const user = await createUser(roles, label);
   await page.goto('/admin/login');
   await page.getByLabel('Email address').fill(user.email);
-  await page.getByLabel('Password', { exact: true }).fill(user.password);
+  await page.getByLabel(/^Password/).fill(user.password);
   await page.getByRole('button', { name: 'Sign in' }).click();
   await expect(page.getByRole('heading', { level: 1, name: /Welcome/ })).toBeVisible();
   return user;

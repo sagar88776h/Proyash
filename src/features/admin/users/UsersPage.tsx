@@ -219,7 +219,7 @@ export function UsersPage() {
         actions={<Button size="sm" iconLeft={<UserPlus aria-hidden="true" className="size-4" />} onClick={() => setInviting(true)}>Invite</Button>}
       />
       <QueryState query={query} isEmpty={(rows) => rows.length === 0} empty={<EmptyState title="No team members" />}>
-        {(rows) => <DataTable rows={rows} columns={columns} rowKey={(m) => m.id} caption="Team members" rowClassName={(m) => (m.is_active ? undefined : 'opacity-70')} />}
+        {(rows) => <DataTable rows={rows} columns={columns} rowKey={(m) => m.id} caption="Team members" rowClassName={(m) => (m.is_active ? undefined : 'bg-ink-50')} />}
       </QueryState>
 
       {inviting && <InviteDialog onClose={() => setInviting(false)} onDone={refresh} />}

@@ -94,7 +94,7 @@ export function LedgerPage() {
               rowKey={(e) => e.id}
               rowHref={(e) => `/admin/finance/entries/${e.id}`}
               caption="Ledger entries"
-              rowClassName={(e) => (e.status === 'rejected' ? 'opacity-60' : undefined)}
+              rowClassName={(e) => (e.status === 'rejected' ? 'bg-ink-50' : undefined)}
             />
             <Pagination page={page} pageSize={PAGE_SIZE} total={d.count} onPageChange={(p) => set('page', String(p))} />
           </div>

@@ -41,6 +41,9 @@ export default defineConfig({
       VITE_SUPABASE_URL: state?.apiUrl ?? '',
       VITE_SUPABASE_ANON_KEY: state?.anonKey ?? '',
       VITE_SITE_URL: BASE_URL,
+      // Serve the production Content-Security-Policy from vercel.json; any
+      // violation is logged as a console error and fails the test.
+      PREVIEW_PRODUCTION_HEADERS_API: state?.apiUrl ?? '',
     },
   },
 });

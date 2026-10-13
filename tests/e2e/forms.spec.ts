@@ -1,3 +1,4 @@
+import type { Page } from '@playwright/test';
 import { anonClient, randomPhone, randomReference, sql, todayIST } from '../helpers/stack';
 import { expect, expectAccessible, test } from './fixtures';
 
@@ -8,7 +9,7 @@ test.beforeEach(async () => {
 });
 
 /** Public endpoints reject forms completed faster than a person could type them. */
-async function humanPause(page: import('@playwright/test').Page) {
+async function humanPause(page: Page) {
   await page.waitForTimeout(2700);
 }
 
