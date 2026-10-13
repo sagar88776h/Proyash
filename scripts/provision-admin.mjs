@@ -40,6 +40,21 @@ if (process.argv.some((a) => /service[_-]?role|sb_secret_/i.test(a))) {
   fail('Do not pass keys as arguments. Set SUPABASE_SERVICE_ROLE_KEY in the environment instead.');
 }
 if (!url || !key) fail('Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in the environment.');
+// Catch the common mistakes before contacting Supabase (without printing the key).
+function jwtRole(token) {
+  try {
+    return JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString()).role;
+  } catch {
+    return undefined;
+  }
+}
+const keyLooksSecret = key.startsWith('sb_secret_') || (key.startsWith('eyJ') && jwtRole(key) === 'service_role');
+if (!keyLooksSecret) {
+  if (key.startsWith('sb_publishable_') || jwtRole(key) === 'anon') {
+    fail('That is the public anon/publishable key. Use the service_role key (Project Settings → API Keys → Legacy API keys → service_role) or a secret key starting with sb_secret_.');
+  }
+  fail('SUPABASE_SERVICE_ROLE_KEY does not look like a Supabase key. Paste the real service_role key (it starts with "eyJ") or secret key (starts with "sb_secret_") — not placeholder text.');
+}
 if (!siteUrl.startsWith('https://') && !/^http:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(siteUrl)) {
   fail('Set SITE_URL to the public https:// address of the website (used for the invitation link).');
 }
