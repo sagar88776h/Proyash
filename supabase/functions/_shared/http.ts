@@ -107,13 +107,28 @@ export async function readMultipart(req: Request, maxBytes: number): Promise<Par
 /** Database error shape returned by PostgREST / supabase-js. */
 export type DbError = { message: string; code?: string; hint?: string | null; details?: string | null };
 
-/** Maps validation errors raised by the database (hint "invalid:<field>") to field errors. */
+/**
+ * Database messages written for people carry a machine-readable code in
+ * `hint` (private.fail() in the migrations). Any other database message is
+ * raw and may reveal internal names, so it is never passed to the caller.
+ */
+export const OWN_HINT = /^[a-z][a-z0-9_]*(:[a-z0-9_]+)?$/;
+
+export function hasOwnMessage(error: DbError): boolean {
+  return Boolean(error.hint && OWN_HINT.test(error.hint) && error.message);
+}
+
 export function dbErrorToHttp(error: DbError): HttpError {
-  const hint = error.hint ?? '';
+  if (!hasOwnMessage(error)) {
+    if (error.code === '42501') return new HttpError(403, 'forbidden', 'You do not have permission to perform this action.');
+    return new HttpError(500, 'server_error', 'Something went wrong on our side. Please try again later.');
+  }
+  const hint = error.hint!;
   if (hint.startsWith('invalid:')) {
     const field = hint.slice('invalid:'.length);
     return new HttpError(422, 'validation_failed', error.message, { [field]: error.message });
   }
-  if (error.code === 'P0001' && hint) return new HttpError(409, hint, error.message);
+  if (error.code === '42501') return new HttpError(403, hint, error.message);
+  if (error.code === 'P0001') return new HttpError(409, hint, error.message);
   return new HttpError(500, 'server_error', 'Something went wrong on our side. Please try again later.');
 }

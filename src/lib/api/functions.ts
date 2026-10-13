@@ -61,10 +61,13 @@ export async function callFunction<T>(fn: FunctionName, path: string, options: C
     // fall through with null body
   }
   if (!res.ok) {
-    const error = (json as ErrorBody | null)?.error;
+    // Only our functions' own error format is trusted for display; anything
+    // else (a gateway or proxy error page) gets a generic message.
+    const body = json as ErrorBody | null;
+    const error = body?.ok === false && typeof body.error?.message === 'string' ? body.error : undefined;
     throw new AppError(
       kindForStatus(res.status),
-      error?.message ?? 'Something went wrong. Please try again.',
+      error?.message ?? (res.status === 429 ? 'Too many attempts. Please wait a few minutes and try again.' : 'Something went wrong. Please try again.'),
       error?.code,
       error?.fields,
     );

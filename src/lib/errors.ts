@@ -30,6 +30,19 @@ function isPostgrestLike(err: unknown): err is PostgrestLike {
 }
 
 const NETWORK_MESSAGE = 'We could not reach the server. Check your internet connection and try again.';
+const GENERIC_MESSAGE = 'Something went wrong. Please try again.';
+
+/**
+ * Messages written for people carry a machine-readable code in `hint`
+ * (see private.fail() in the database). Anything else is a raw database or
+ * server message: it can reveal table, column or constraint names, so it is
+ * never shown — a generic message is used instead.
+ */
+const OWN_HINT = /^[a-z][a-z0-9_]*(:[a-z0-9_]+)?$/;
+
+function ownMessage(err: PostgrestLike): string | undefined {
+  return err.hint && OWN_HINT.test(err.hint) && err.message ? err.message : undefined;
+}
 
 export function toAppError(err: unknown): AppError {
   if (err instanceof AppError) return err;
@@ -41,33 +54,33 @@ export function toAppError(err: unknown): AppError {
     return new AppError('network', 'The request took too long. Please try again.');
   }
   if (isPostgrestLike(err)) {
-    const hint = err.hint ?? undefined;
-    const message = err.message ?? 'Something went wrong.';
+    const own = ownMessage(err);
+    const hint = own ? (err.hint ?? undefined) : undefined;
     switch (err.code) {
       case '42501':
-        return new AppError('forbidden', hint === 'forbidden' || !hint ? 'You do not have permission to do this.' : message, hint);
+        return new AppError('forbidden', hint && hint !== 'forbidden' && own ? own : 'You do not have permission to do this.', hint ?? 'forbidden');
       case '23505':
         return new AppError('conflict', 'A record with these details already exists (for example the same payment reference).', 'duplicate');
       case '23514':
         return new AppError('validation', 'Some of the values are not allowed. Please check the form.', 'check_violation');
       case '22023': {
+        if (!own) return new AppError('validation', 'Some of the values are not allowed. Please check the form.', 'invalid');
         const field = hint?.startsWith('invalid:') ? hint.slice(8) : undefined;
-        return new AppError('validation', message, hint, field ? { [field]: message } : undefined);
+        return new AppError('validation', own, hint, field ? { [field]: own } : undefined);
       }
       case 'PGRST116':
         return new AppError('not_found', 'The record could not be found.', 'not_found');
       case 'P0001':
-        return new AppError('conflict', message, hint);
+        return own ? new AppError('conflict', own, hint) : new AppError('server', GENERIC_MESSAGE);
       default:
-        if (err.code?.startsWith('PGRST')) return new AppError('server', 'The request could not be processed.', err.code);
-        if (/failed to fetch|network/i.test(message)) return new AppError('network', NETWORK_MESSAGE);
-        return new AppError('server', 'Something went wrong. Please try again.', err.code);
+        if (/failed to fetch|network/i.test(err.message ?? '')) return new AppError('network', NETWORK_MESSAGE);
+        return new AppError('server', GENERIC_MESSAGE);
     }
   }
   if (err instanceof Error && /failed to fetch|network/i.test(err.message)) {
     return new AppError('network', NETWORK_MESSAGE);
   }
-  return new AppError('server', 'Something went wrong. Please try again.');
+  return new AppError('server', GENERIC_MESSAGE);
 }
 
 export function errorMessage(err: unknown): string {

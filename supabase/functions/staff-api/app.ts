@@ -74,10 +74,7 @@ export function createStaffApi(deps: StaffApiDeps): (req: Request) => Promise<Re
 
   async function asCaller<T>(jwt: string, fn: string, args: Record<string, unknown>): Promise<T> {
     const { data, error } = await deps.userRpc<T>(jwt, fn, args);
-    if (error) {
-      if (error.code === '42501') throw new HttpError(403, error.hint ?? 'forbidden', error.message);
-      throw dbErrorToHttp(error);
-    }
+    if (error) throw dbErrorToHttp(error);
     return data as T;
   }
 

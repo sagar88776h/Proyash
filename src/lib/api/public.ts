@@ -4,7 +4,7 @@
  * every query lists its columns explicitly.
  */
 import type { ContentKey } from '@/content/registry';
-import { unwrap } from '@/lib/errors';
+import { AppError, unwrap } from '@/lib/errors';
 import { getSupabase } from '@/lib/supabase';
 import type { Enums, Json } from '@/types/database';
 
@@ -350,6 +350,6 @@ export async function fetchPublishedReport(id: string) {
 
 export async function reportDocumentUrl(path: string): Promise<string> {
   const { data, error } = await (await getSupabase()).storage.from('report-documents').createSignedUrl(path, 300, { download: true });
-  if (error || !data) throw new Error('This document could not be opened. Please try again.');
+  if (error || !data) throw new AppError('server', 'This document could not be opened. Please try again.');
   return data.signedUrl;
 }

@@ -8,7 +8,7 @@ import { Field, Input } from '@/components/ui/Field';
 import { PasswordForm } from '@/features/auth/SetPasswordPage';
 import { authErrorMessage } from '@/features/auth/passwordPolicy';
 import { useAuth } from '@/features/auth/useAuth';
-import { errorMessage } from '@/lib/errors';
+import { AppError, errorMessage } from '@/lib/errors';
 import { formatDate } from '@/lib/format';
 import { ROLE_DESCRIPTIONS, ROLE_LABELS } from '@/lib/labels';
 import { updateMyName } from '../api/admin';
@@ -180,7 +180,7 @@ function TwoStep() {
         onConfirm={async () => {
           if (!removing) return;
           const { error: unenrollError } = await db().auth.mfa.unenroll({ factorId: removing });
-          if (unenrollError) throw new Error(auth.aal !== 'aal2' ? 'Sign in again with your code first, then try again.' : 'Two-step verification could not be removed. Please try again.');
+          if (unenrollError) throw new AppError('forbidden', auth.aal !== 'aal2' ? 'Sign in again with your code first, then try again.' : 'Two-step verification could not be removed. Please try again.');
           await refresh();
           toast.success('Two-step verification removed.');
         }}

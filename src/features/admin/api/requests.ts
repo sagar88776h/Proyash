@@ -1,5 +1,5 @@
 import { sanitizeSearch } from '@/lib/api/public';
-import { unwrap } from '@/lib/errors';
+import { AppError, unwrap } from '@/lib/errors';
 import type { Enums, Tables } from '@/types/database';
 import { db } from '../components/db';
 
@@ -127,7 +127,7 @@ export async function markFollowupsRead(id: string) {
 
 export async function followupAttachmentUrl(path: string) {
   const { data, error } = await db().storage.from('assistance-files').createSignedUrl(path, 120, { download: true });
-  if (error || !data) throw new Error('The attachment could not be opened.');
+  if (error || !data) throw new AppError('server', 'The attachment could not be opened.');
   return data.signedUrl;
 }
 

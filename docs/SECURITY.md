@@ -124,6 +124,32 @@ tables:
 - Deactivating an account removes all access immediately (roles are honoured
   only for active profiles) and blocks its sessions from being renewed.
 
+## Error messages
+
+Detailed errors help attackers map a system, so people only ever see short,
+friendly messages:
+
+- Database functions raise errors through `private.fail(code, message)`, which
+  puts a `snake_case` code in the error’s `hint`. Only messages carrying such a
+  code are shown; every other database, PostgREST or storage message (which
+  can contain table, column or constraint names) is replaced with a generic
+  message — both in the browser (`src/lib/errors.ts`) and in the Edge
+  Functions (`dbErrorToHttp`).
+- The browser only displays error text from the Edge Functions’ own response
+  format, never from a gateway or proxy.
+- Unexpected exceptions show “Something went wrong. Please try again.”; page
+  crashes show a generic page with no technical details. No stack traces are
+  shown and production builds have no source maps.
+- Append-only records refuse changes with a generic message that does not
+  name the table.
+- Unit tests (`src/lib/errors.test.ts`) feed real Postgres/PostgREST error
+  messages through both paths and fail if any internal detail would be shown.
+
+Note: anyone can call the Supabase API directly with the public key. Direct
+API callers receive Postgres’s own short error codes for refused requests
+(for example “permission denied”), which is how Supabase works; Row Level
+Security ensures they still cannot read or change protected data.
+
 ## Browser hardening
 
 `vercel.json` sets a strict Content-Security-Policy (scripts only from the

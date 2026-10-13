@@ -1,3 +1,4 @@
+import { AppError } from './errors';
 /**
  * Prepares a photo for upload in the browser: decodes it (respecting the
  * camera orientation), scales it down and re-encodes it as WebP (or JPEG).
@@ -15,14 +16,14 @@ async function encode(canvas: HTMLCanvasElement, type: string, quality: number):
 
 export async function prepareImage(file: File, maxDimension = 2000, quality = 0.84): Promise<PreparedImage> {
   if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
-    throw new Error(`${file.name}: please choose a JPG, PNG or WebP photo.`);
+    throw new AppError('validation', `${file.name}: please choose a JPG, PNG or WebP photo.`);
   }
-  if (file.size > MAX_SOURCE_BYTES) throw new Error(`${file.name} is larger than 25 MB.`);
+  if (file.size > MAX_SOURCE_BYTES) throw new AppError('validation', `${file.name} is larger than 25 MB.`);
   let bitmap: ImageBitmap;
   try {
     bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' });
   } catch {
-    throw new Error(`${file.name} could not be read as an image.`);
+    throw new AppError('validation', `${file.name} could not be read as an image.`);
   }
   const scale = Math.min(1, maxDimension / Math.max(bitmap.width, bitmap.height));
   const width = Math.max(1, Math.round(bitmap.width * scale));
@@ -31,7 +32,7 @@ export async function prepareImage(file: File, maxDimension = 2000, quality = 0.
   canvas.width = width;
   canvas.height = height;
   const ctx = canvas.getContext('2d');
-  if (!ctx) throw new Error('Your browser could not process this image.');
+  if (!ctx) throw new AppError('server', 'Your browser could not process this image.');
   ctx.imageSmoothingQuality = 'high';
   ctx.drawImage(bitmap, 0, 0, width, height);
   bitmap.close();
@@ -41,6 +42,6 @@ export async function prepareImage(file: File, maxDimension = 2000, quality = 0.
     blob = await encode(canvas, 'image/jpeg', quality);
     mime = 'image/jpeg';
   }
-  if (!blob) throw new Error('Your browser could not process this image.');
+  if (!blob) throw new AppError('server', 'Your browser could not process this image.');
   return { blob, width, height, mime };
 }

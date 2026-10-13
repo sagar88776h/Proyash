@@ -1,5 +1,5 @@
 import { sanitizeSearch, type ReportSnapshot } from '@/lib/api/public';
-import { unwrap } from '@/lib/errors';
+import { AppError, toAppError, unwrap } from '@/lib/errors';
 import type { Enums, Json, Tables, TablesInsert } from '@/types/database';
 import { db } from '../components/db';
 
@@ -290,12 +290,12 @@ export async function reverseEntry(id: string, reason: string, date: string) {
 export async function uploadEvidence(entryId: string, file: File, kind: Enums<'evidence_kind'>, userId: string) {
   const allowed: Record<string, string> = { 'application/pdf': 'pdf', 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp' };
   const ext = allowed[file.type];
-  if (!ext) throw new Error('Upload a PDF, JPG, PNG or WebP file.');
-  if (file.size > 10 * 1024 * 1024) throw new Error('Files must be 10 MB or smaller.');
+  if (!ext) throw new AppError('validation', 'Upload a PDF, JPG, PNG or WebP file.');
+  if (file.size > 10 * 1024 * 1024) throw new AppError('validation', 'Files must be 10 MB or smaller.');
   const path = `entries/${entryId}/${crypto.randomUUID()}.${ext}`;
   const client = db();
   const { error: upErr } = await client.storage.from('finance-evidence').upload(path, file, { contentType: file.type, upsert: false });
-  if (upErr) throw new Error(`Upload failed: ${upErr.message}`);
+  if (upErr) throw new AppError('server', 'The file could not be uploaded. Please try again.');
   const { error } = await client.from('ledger_evidence').insert({
     ledger_entry_id: entryId,
     storage_path: path,
@@ -307,13 +307,13 @@ export async function uploadEvidence(entryId: string, file: File, kind: Enums<'e
   });
   if (error) {
     await client.storage.from('finance-evidence').remove([path]);
-    throw new Error(`The file could not be attached: ${error.message}`);
+    throw toAppError(error);
   }
 }
 
 export async function evidenceUrl(path: string) {
   const { data, error } = await db().storage.from('finance-evidence').createSignedUrl(path, 120);
-  if (error || !data) throw new Error('The file could not be opened.');
+  if (error || !data) throw new AppError('server', 'The file could not be opened.');
   return data.signedUrl;
 }
 
@@ -405,13 +405,13 @@ export async function deleteReportDraft(id: string) {
 }
 
 export async function uploadReportDocument(reportId: string, file: File, title: string, userId: string) {
-  if (file.type !== 'application/pdf') throw new Error('Report documents must be PDF files.');
-  if (file.size > 20 * 1024 * 1024) throw new Error('Report documents must be 20 MB or smaller.');
+  if (file.type !== 'application/pdf') throw new AppError('validation', 'Report documents must be PDF files.');
+  if (file.size > 20 * 1024 * 1024) throw new AppError('validation', 'Report documents must be 20 MB or smaller.');
   const safe = file.name.replace(/\.pdf$/i, '').replace(/[^A-Za-z0-9._-]+/g, '-').slice(0, 80) || 'document';
   const path = `reports/${reportId}/${safe}-${crypto.randomUUID().slice(0, 8)}.pdf`;
   const client = db();
   const { error: upErr } = await client.storage.from('report-documents').upload(path, file, { contentType: 'application/pdf', upsert: false });
-  if (upErr) throw new Error(`Upload failed: ${upErr.message}`);
+  if (upErr) throw new AppError('server', 'The file could not be uploaded. Please try again.');
   const { error } = await client.from('financial_report_documents').insert({
     report_id: reportId,
     title,
@@ -423,7 +423,7 @@ export async function uploadReportDocument(reportId: string, file: File, title: 
   });
   if (error) {
     await client.storage.from('report-documents').remove([path]);
-    throw new Error(`The document could not be attached: ${error.message}`);
+    throw toAppError(error);
   }
 }
 
@@ -434,7 +434,7 @@ export async function removeReportDocument(doc: Tables<'financial_report_documen
 
 export async function reportDocumentStaffUrl(path: string) {
   const { data, error } = await db().storage.from('report-documents').createSignedUrl(path, 120);
-  if (error || !data) throw new Error('The document could not be opened.');
+  if (error || !data) throw new AppError('server', 'The document could not be opened.');
   return data.signedUrl;
 }
 

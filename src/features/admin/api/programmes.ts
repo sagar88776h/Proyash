@@ -1,6 +1,6 @@
 import { callFunction } from '@/lib/api/functions';
 import { sanitizeSearch } from '@/lib/api/public';
-import { unwrap } from '@/lib/errors';
+import { AppError, unwrap } from '@/lib/errors';
 import { prepareImage } from '@/lib/images';
 import type { Enums, Tables, TablesInsert, TablesUpdate } from '@/types/database';
 import { db } from '../components/db';
@@ -141,7 +141,7 @@ export async function uploadPhoto(file: File, uploadedBy: string, links: { proje
   const path = `uploads/${id}.${ext}`;
   const client = db();
   const { error: uploadError } = await client.storage.from('media-private').upload(path, prepared.blob, { contentType: prepared.mime, upsert: false });
-  if (uploadError) throw new Error(`${file.name}: upload failed (${uploadError.message}).`);
+  if (uploadError) throw new AppError('server', `${file.name}: the upload failed. Please try again.`);
   const { error } = await client.from('media_assets').insert({
     id,
     private_path: path,
@@ -155,7 +155,7 @@ export async function uploadPhoto(file: File, uploadedBy: string, links: { proje
   });
   if (error) {
     await client.storage.from('media-private').remove([path]);
-    throw new Error(`${file.name}: could not be saved (${error.message}).`);
+    throw new AppError('server', `${file.name}: the photo could not be saved. Please try again.`);
   }
   return id;
 }
