@@ -12,7 +12,7 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "typecheck": "tsc -b --noEmit",
-    "typecheck:functions": "deno check --config supabase/functions/deno.json supabase/functions/public-api/index.ts supabase/functions/staff-api/index.ts",
+    "typecheck:functions": "deno check --config supabase/functions/public-api/deno.json supabase/functions/public-api/index.ts && deno check --config supabase/functions/staff-api/deno.json supabase/functions/staff-api/index.ts",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
