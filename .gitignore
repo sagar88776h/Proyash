@@ -1,0 +1,30 @@
+# dependencies
+node_modules/
+
+# builds
+dist/
+dist-ssr/
+*.tsbuildinfo
+coverage/
+
+# env — never commit secrets
+.env
+.env.*
+!.env.example
+
+# local Supabase / test stack state
+.local-stack/
+supabase/.temp/
+supabase/.branches/
+
+# test output
+playwright-report/
+test-results/
+blob-report/
+
+# editors / OS
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.log
