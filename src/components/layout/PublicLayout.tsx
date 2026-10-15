@@ -15,7 +15,7 @@ export function SkipLink() {
 
 export function PublicLayout() {
   return (
-    <>
+    <div className="public-site min-h-dvh bg-white">
       <SkipLink />
       <SiteHeader />
       <main id="main" tabIndex={-1} className="outline-none">
@@ -23,6 +23,6 @@ export function PublicLayout() {
       </main>
       <SiteFooter />
       <ScrollRestoration />
-    </>
+    </div>
   );
 }

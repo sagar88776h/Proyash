@@ -58,7 +58,7 @@ export function OurWorkPage() {
       <PageHero eyebrow="Projects" title={textOf(content, 'heading')} intro={textOf(content, 'intro')} />
       <Section tone="ivory">
         <Container>
-          <form role="search" aria-label="Filter projects" onSubmit={(e) => e.preventDefault()} className="mb-10 grid gap-4 rounded-card bg-ivory-50 p-5 shadow-soft sm:grid-cols-2 lg:grid-cols-4">
+          <form role="search" aria-label="Filter projects" onSubmit={(e) => e.preventDefault()} className="mb-10 grid gap-4 rounded-3xl bg-mint-50 p-5 shadow-soft sm:grid-cols-2 lg:grid-cols-4">
             <Field label="Search" id="project-search">
               <div className="relative">
                 <Search aria-hidden="true" className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-ink-500" />
@@ -98,7 +98,7 @@ export function OurWorkPage() {
             loading={
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {Array.from({ length: 6 }, (_, i) => (
-                  <Skeleton key={i} className="h-96 rounded-card" />
+                  <Skeleton key={i} className="h-96 rounded-3xl" />
                 ))}
               </div>
             }

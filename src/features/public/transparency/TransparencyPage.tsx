@@ -43,7 +43,7 @@ export function TransparencyPage() {
             query={reports}
             enabled={isBackendConfigured}
             isEmpty={(rows) => rows.length === 0}
-            loading={<Skeleton className="h-64 rounded-panel" />}
+            loading={<Skeleton className="h-64 rounded-bento" />}
             empty={
               <EmptyState
                 icon={<FileText aria-hidden="true" className="size-8" />}
@@ -54,12 +54,12 @@ export function TransparencyPage() {
           >
             {(rows) => (
               <div className="flex flex-col gap-8">
-                <div className="on-dark grain rounded-panel bg-forest-800 p-7 text-ivory-50 sm:p-10">
+                <div className="on-dark grain rounded-bento bg-forest-800 p-7 text-ivory-50 sm:p-10">
                   <p className="mb-4 text-sm font-medium tracking-wide text-gold-300 uppercase">Latest report</p>
                   <ReportSummary report={rows[0]!} />
                 </div>
                 {rows.length > 1 && (
-                  <div className="overflow-x-auto rounded-card bg-ivory-50 shadow-soft">
+                  <div className="overflow-x-auto rounded-3xl bg-mint-50 shadow-soft">
                     <table className="w-full min-w-[40rem] text-left text-[0.9375rem]">
                       <caption className="sr-only">Earlier financial reports</caption>
                       <thead className="border-b border-ink-100 text-sm text-ink-600">

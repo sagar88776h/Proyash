@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/cn';
-import { ConstellationSvg } from '@/components/visual/ConstellationSvg';
-import { Container } from './Container';
+import { Container, Eyebrow } from './Container';
 
 type PageHeroProps = {
   eyebrow?: ReactNode;
@@ -12,20 +11,22 @@ type PageHeroProps = {
   size?: 'default' | 'compact';
 };
 
-/** Dark editorial banner at the top of inner pages (the header sits on top of it). */
+/** Light, rounded banner at the top of inner pages (the floating header sits above it). */
 export function PageHero({ eyebrow, title, intro, children, className, size = 'default' }: PageHeroProps) {
   return (
-    <section className={cn('on-dark grain relative overflow-hidden bg-forest-800 text-ivory-50', className)}>
-      <ConstellationSvg className="pointer-events-none absolute inset-y-0 right-[-20%] h-full w-[85%] opacity-35 sm:right-[-8%] sm:w-[70%]" />
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(70%_120%_at_0%_100%,rgb(7_26_18/0.7),transparent_60%)]" />
-      <Container className={cn('relative', size === 'default' ? 'pt-40 pb-20 sm:pt-44 sm:pb-24' : 'pt-36 pb-14 sm:pt-40 sm:pb-16')}>
-        <div className="flex max-w-3xl flex-col gap-5">
-          {eyebrow && <p className="eyebrow">{eyebrow}</p>}
-          <h1 className="text-display-xl font-semibold">{title}</h1>
-          {intro && <div className="text-lead max-w-2xl text-ivory-100/85">{intro}</div>}
-          {children && <div className="mt-3 flex flex-wrap gap-3">{children}</div>}
-        </div>
-      </Container>
+    <section className={cn('px-2 pt-24 sm:px-4 sm:pt-28', className)}>
+      <div className="bg-mesh relative overflow-hidden rounded-bento">
+        <div aria-hidden="true" className="pointer-events-none absolute -top-24 -right-16 size-72 rounded-full border-[28px] border-white/60 sm:size-96" />
+        <div aria-hidden="true" className="pointer-events-none absolute -bottom-20 left-1/3 size-48 rounded-full bg-gold-100/70 blur-2xl" />
+        <Container className={cn('relative', size === 'default' ? 'py-16 sm:py-24' : 'py-12 sm:py-16')}>
+          <div className="flex max-w-3xl flex-col gap-5">
+            {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
+            <h1 className="text-display-xl font-semibold text-ink-900">{title}</h1>
+            {intro && <div className="text-lead max-w-2xl text-ink-700">{intro}</div>}
+            {children && <div className="mt-3 flex flex-wrap gap-3">{children}</div>}
+          </div>
+        </Container>
+      </div>
     </section>
   );
 }

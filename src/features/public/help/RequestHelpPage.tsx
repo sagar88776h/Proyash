@@ -46,7 +46,7 @@ function SuccessPanel({ outcome, onReset }: { outcome: Outcome; onReset: () => v
     <div
       role="status"
       aria-live="polite"
-      className="flex flex-col gap-6 rounded-panel bg-ivory-50 p-8 shadow-soft sm:p-12"
+      className="flex flex-col gap-6 rounded-bento bg-mint-50 p-8 shadow-soft sm:p-12"
     >
       <CheckCircle2 aria-hidden="true" className="size-12 text-success-700" strokeWidth={1.5} />
       {outcome.kind === 'created' && (
@@ -54,7 +54,7 @@ function SuccessPanel({ outcome, onReset }: { outcome: Outcome; onReset: () => v
           <h2 className="text-display-md font-semibold">
             Thank you — we have received your request
           </h2>
-          <div className="flex flex-col gap-3 rounded-card bg-forest-50 p-6">
+          <div className="flex flex-col gap-3 rounded-3xl bg-forest-50 p-6">
             <p className="text-sm font-medium text-ink-700">Your reference number</p>
             <div className="flex flex-wrap items-center gap-4">
               <p className="font-display text-3xl font-semibold tracking-[0.06em] text-forest-800 tabular-nums">
@@ -360,7 +360,7 @@ function RequestForm() {
         </p>
       </fieldset>
 
-      <div className="flex flex-col gap-5 rounded-card bg-ivory-200/60 p-6">
+      <div className="flex flex-col gap-5 rounded-3xl bg-mint-50 p-6">
         <div id="f-consent">
           <Checkbox
             label="I agree that PRAYASH may use these details to review this request and to contact me about it."
@@ -411,7 +411,7 @@ export function RequestHelpPage() {
       >
         <ButtonLink
           to="/request-help/status"
-          variant="light"
+          variant="secondary"
           iconLeft={<Search aria-hidden="true" className="size-4" />}
         >
           Check an existing request
@@ -437,7 +437,7 @@ export function RequestHelpPage() {
                   ))}
                 </ol>
               </Reveal>
-              <Reveal className="rounded-card border border-gold-500/40 bg-gold-100/60 p-6">
+              <Reveal className="rounded-3xl border border-gold-500/40 bg-gold-100/60 p-6">
                 <p className="mb-3 flex items-center gap-2 font-semibold text-gold-800">
                   <Info aria-hidden="true" className="size-5" /> Important
                 </p>

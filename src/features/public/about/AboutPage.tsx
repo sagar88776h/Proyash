@@ -76,7 +76,7 @@ export function AboutPage() {
           <SectionHeading eyebrow="What we stand for" title="Our commitments" id="commitments-heading" className="mb-12" />
           <ul className="grid gap-5 sm:grid-cols-2">
             {itemsOf(content, 'commitments').map((item, i) => (
-              <Reveal as="li" key={item.title} delay={i * 0.06} className="flex flex-col gap-3 rounded-card bg-ivory-50 p-8 shadow-[inset_0_0_0_1px_rgb(34_41_35/0.07)]">
+              <Reveal as="li" key={item.title} delay={i * 0.06} className="flex flex-col gap-3 rounded-3xl bg-mint-50 p-8 shadow-[inset_0_0_0_1px_rgb(34_41_35/0.07)]">
                 <span className="font-display text-sm font-semibold text-gold-700">0{i + 1}</span>
                 <h3 className="font-display text-xl font-semibold">{item.title}</h3>
                 <p className="text-ink-600">{item.body}</p>

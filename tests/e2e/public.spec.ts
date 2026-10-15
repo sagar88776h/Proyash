@@ -1,10 +1,26 @@
+import { sql } from '../helpers/stack';
 import { expect, expectAccessible, test } from './fixtures';
+
+// Published data so data-driven sections (villages, projects) actually render.
+test.beforeAll(async () => {
+  await sql(
+    "insert into public.villages (slug, name, summary, is_published) values ('e2e-seed-village', 'Seed Village', 'Seeded for end-to-end tests.', true) on conflict (slug) do nothing",
+  );
+  await sql(
+    `insert into public.projects (slug, title, summary, category, status, village_id, is_published)
+     select 'e2e-seed-project', 'Seed Project', 'Seeded for end-to-end tests.', 'education', 'ongoing', id, true
+     from public.villages where slug = 'e2e-seed-village'
+     on conflict (slug) do nothing`,
+  );
+});
 
 const PAGES = [
   { path: '/', name: 'Home' },
   { path: '/about', name: 'About' },
   { path: '/our-work', name: 'Our Work' },
   { path: '/villages', name: 'Villages' },
+  { path: '/villages/e2e-seed-village', name: 'Village detail' },
+  { path: '/our-work/e2e-seed-project', name: 'Project detail' },
   { path: '/request-help', name: 'Request Help' },
   { path: '/request-help/status', name: 'Check a request' },
   { path: '/support-us', name: 'Support Us' },
@@ -24,6 +40,8 @@ for (const p of PAGES) {
     await expect(page.getByRole('contentinfo')).toBeVisible();
     // Let data-driven sections settle before auditing.
     await page.waitForLoadState('networkidle');
+    // No section may fail to load for visitors.
+    await expect(page.getByText(/something went wrong|could not load|do not have permission/i)).toHaveCount(0);
     await expectAccessible(page, p.path);
     // No horizontal scrolling at any viewport.
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);

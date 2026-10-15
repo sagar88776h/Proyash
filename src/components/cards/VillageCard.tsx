@@ -6,11 +6,11 @@ import { cn } from '@/lib/cn';
 import { villageLocation } from '@/lib/places';
 
 export function VillageCard({ village, className }: { village: PublicVillage; className?: string }) {
-  const count = village.projects?.[0]?.count ?? 0;
+  const count = village.projects?.length ?? 0;
   return (
-    <article className={cn('group relative flex flex-col overflow-hidden rounded-card bg-ivory-50 shadow-[inset_0_0_0_1px_rgb(34_41_35/0.07)] transition-shadow duration-500 hover:shadow-lift', className)}>
-      <Photo media={village.cover} className="aspect-[16/10]" placeholderLabel="Village photograph to be added" sizes="(min-width: 1024px) 33vw, 100vw" />
-      <div className="flex flex-1 flex-col gap-2 p-6">
+    <article className={cn('group relative flex flex-col overflow-hidden rounded-3xl bg-white p-2 shadow-card ring-1 ring-ink-900/[0.06] transition-[box-shadow,transform] duration-500 ease-out-expo hover:-translate-y-1 hover:shadow-float', className)}>
+      <Photo media={village.cover} className="aspect-[16/10] overflow-hidden rounded-2xl" placeholderLabel="Village photograph to be added" sizes="(min-width: 1024px) 33vw, 100vw" />
+      <div className="flex flex-1 flex-col gap-2 px-4 pt-5 pb-4">
         <h3 className="font-display text-xl font-semibold">
           <Link to={`/villages/${village.slug}`} className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none">
             {village.name}

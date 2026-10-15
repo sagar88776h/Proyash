@@ -57,7 +57,7 @@ function FollowUpForm({ credentials, onSent }: { credentials: LookupOutput; onSe
   return (
     <form
       noValidate
-      className="relative flex flex-col gap-5 rounded-card bg-ivory-50 p-6 shadow-soft sm:p-8"
+      className="relative flex flex-col gap-5 rounded-3xl bg-mint-50 p-6 shadow-soft sm:p-8"
       onSubmit={async (e) => {
         e.preventDefault();
         setError(undefined);
@@ -160,7 +160,7 @@ export function RequestStatusPage() {
           <form
             noValidate
             onSubmit={form.handleSubmit(lookup, () => submission.markAttempt())}
-            className="flex flex-col gap-6 rounded-panel bg-ivory-50 p-6 shadow-soft sm:p-10"
+            className="flex flex-col gap-6 rounded-bento bg-mint-50 p-6 shadow-soft sm:p-10"
           >
             <FormErrorSummary errors={summariseErrors(form.formState.errors)} attempt={submission.attempt} />
             {submission.serverError && !submission.serverError.fields && (
@@ -188,7 +188,7 @@ export function RequestStatusPage() {
 
           {status && (
             <section aria-live="polite" aria-labelledby="status-heading" className="flex flex-col gap-6">
-              <div className="flex flex-col gap-4 rounded-panel bg-ivory-50 p-6 shadow-soft sm:p-10">
+              <div className="flex flex-col gap-4 rounded-bento bg-mint-50 p-6 shadow-soft sm:p-10">
                 <p className="text-sm text-ink-600">
                   Request <span className="font-semibold text-ink-900">{status.reference_code}</span> ·{' '}
                   {ASSISTANCE_CATEGORY_LABELS[status.category]}
@@ -208,7 +208,7 @@ export function RequestStatusPage() {
                   </div>
                 </dl>
                 {status.applicant_message && (
-                  <div className="rounded-card bg-gold-100/70 p-5">
+                  <div className="rounded-3xl bg-gold-100/70 p-5">
                     <p className="text-sm font-semibold text-gold-800">Message from the PRAYASH team</p>
                     <p className="mt-1 whitespace-pre-line text-ink-800">{status.applicant_message}</p>
                   </div>

@@ -67,7 +67,7 @@ function ContactForm() {
 
   if (sent) {
     return (
-      <div role="status" className="flex flex-col gap-4 rounded-panel bg-ivory-50 p-8 shadow-soft">
+      <div role="status" className="flex flex-col gap-4 rounded-bento bg-mint-50 p-8 shadow-soft">
         <CheckCircle2 aria-hidden="true" className="size-10 text-success-700" strokeWidth={1.5} />
         <h2 className="font-display text-2xl font-semibold">Thank you for your message</h2>
         <p className="text-ink-700">A member of the PRAYASH team will reply as soon as possible.</p>
@@ -90,7 +90,7 @@ function ContactForm() {
   return (
     <form
       noValidate
-      className="relative flex flex-col gap-6 rounded-panel bg-ivory-50 p-6 shadow-soft sm:p-10"
+      className="relative flex flex-col gap-6 rounded-bento bg-mint-50 p-6 shadow-soft sm:p-10"
       onSubmit={(event) =>
         void form.handleSubmit(
           async (values) => {

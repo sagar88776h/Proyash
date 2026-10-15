@@ -15,19 +15,19 @@ export function ProjectCard({ project, className, headingLevel = 'h3' }: { proje
   return (
     <article
       className={cn(
-        'group relative flex flex-col overflow-hidden rounded-card bg-ivory-50 shadow-[inset_0_0_0_1px_rgb(34_41_35/0.07)] transition-[box-shadow,transform] duration-500 ease-out-expo',
-        'hover:-translate-y-1 hover:shadow-lift focus-within:shadow-lift',
+        'group relative flex flex-col overflow-hidden rounded-3xl bg-white p-2 shadow-card ring-1 ring-ink-900/[0.06] transition-[box-shadow,transform] duration-500 ease-out-expo',
+        'hover:-translate-y-1 hover:shadow-float focus-within:shadow-float',
         className,
       )}
     >
       <Photo
         media={project.cover}
-        className="aspect-[4/3] bg-ivory-200"
+        className="aspect-[4/3] overflow-hidden rounded-2xl bg-mint-50"
         imgClassName="transition-transform duration-[1200ms] ease-out-expo group-hover:scale-[1.04]"
         placeholderLabel="Project photograph to be added"
         sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
       />
-      <div className="flex flex-1 flex-col gap-3 p-6">
+      <div className="flex flex-1 flex-col gap-3 px-4 pt-5 pb-4">
         <div className="flex flex-wrap items-center gap-2">
           <Badge tone="gold">{ACTIVITY_CATEGORY_LABELS[project.category]}</Badge>
           <Badge tone={statusTone[project.status]}>{PROJECT_STATUS_LABELS[project.status]}</Badge>

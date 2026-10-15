@@ -21,7 +21,8 @@ export type PublicVillage = {
   summary: string | null;
   description: string;
   cover: MediaRef;
-  projects: { count: number }[];
+  /** Published projects in this village (ids only; visitors cannot run aggregate counts). */
+  projects: { id: string }[];
 };
 
 export type PublicProject = {
@@ -178,7 +179,7 @@ export async function fetchPublishedVillages(): Promise<PublicVillage[]> {
       .from('villages')
       .select(
         `id, slug, name, local_name, block, district, state, summary, description,
-         cover:media_assets!villages_cover_media_fk(${MEDIA_COLUMNS}), projects(count)`,
+         cover:media_assets!villages_cover_media_fk(${MEDIA_COLUMNS}), projects(id)`,
       )
       .eq('is_published', true)
       .order('sort_order')
@@ -193,7 +194,7 @@ export async function fetchVillageBySlug(slug: string): Promise<PublicVillage | 
       .from('villages')
       .select(
         `id, slug, name, local_name, block, district, state, summary, description,
-         cover:media_assets!villages_cover_media_fk(${MEDIA_COLUMNS}), projects(count)`,
+         cover:media_assets!villages_cover_media_fk(${MEDIA_COLUMNS}), projects(id)`,
       )
       .eq('is_published', true)
       .eq('slug', slug)

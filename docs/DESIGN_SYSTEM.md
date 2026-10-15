@@ -1,5 +1,11 @@
 # Design system
 
+> **Public website style: “Clean & bright”** (October 2026). White pages,
+> floating pill navigation, light mint-washed page heroes in rounded panels,
+> bento-style card grids, rounded dark-green bands for emphasis, and pill
+> labels. The admin portal keeps its original styling.
+
+
 The look is editorial and calm: generous space, warm paper tones, deep forest
 green and a restrained gold accent. It aims to feel trustworthy and humane
 rather than flashy. Tokens live in `src/styles/index.css` (Tailwind v4
@@ -11,7 +17,9 @@ rather than flashy. Tokens live in `src/styles/index.css` (Tailwind v4
 | --- | --- | --- |
 | `forest-700` | `#174B35` | Brand green: primary buttons, links, headings on light backgrounds |
 | `forest-800/900/950` | darker greens | Dark sections, hero, footer |
-| `ivory-50…300` | `#F7F5EE` family | Page backgrounds and cards |
+| `ivory-50…300` | `#F7F5EE` family | Admin portal backgrounds |
+| `mint-50…200` | `#F3F9F5` family | Public site tints: hero washes, light cards, active nav |
+| `leaf-500` / `leaf-700` | `#2A9D68` / `#17744A` | Accent dots (decorative) / accent text such as the hero’s second line |
 | `gold-400` | `#D5AE69` | **Decorative only** (rules, icons, focus ring on dark) and the gold button with dark text |
 | `gold-700` | `#7A5C24` | Gold-coloured **text** on light backgrounds (meets contrast) |
 | `ink-900` | `#222923` | Body text |
@@ -34,9 +42,12 @@ instead); every status has a text label.
 
 ## Shape, depth and texture
 
-- Radii: `rounded-card` (20 px) for cards, `rounded-panel` (28 px) for large
-  panels, `rounded-full` for buttons and badges.
-- Shadows: `shadow-soft` (resting), `shadow-lift` (raised/hover).
+- Radii: `rounded-3xl` (24 px) for public cards, `rounded-bento` (32 px) for
+  heroes, bento tiles, dark bands and the footer; `rounded-full` for the
+  navigation bar, buttons and pill labels. (Admin: `rounded-card`/`rounded-panel`.)
+- Shadows: `shadow-card` (resting), `shadow-float` (hover, floating nav, hero
+  visual); `shadow-soft`/`shadow-lift` in the admin portal.
+- `.bg-mesh` paints the soft mint/gold wash behind page heroes.
 - `.grain` adds a very subtle paper texture on dark sections.
 - Blur is limited to the scrolled header, dialog backdrops and the sticky
   save bar in the content editor; no stacked translucent layers over content.

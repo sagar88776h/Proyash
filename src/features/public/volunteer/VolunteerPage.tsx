@@ -73,7 +73,7 @@ function VolunteerForm() {
     return (
       <div
         role="status"
-        className="flex flex-col gap-4 rounded-panel bg-ivory-50 p-8 shadow-soft sm:p-10"
+        className="flex flex-col gap-4 rounded-bento bg-mint-50 p-8 shadow-soft sm:p-10"
       >
         <CheckCircle2 aria-hidden="true" className="size-10 text-success-700" strokeWidth={1.5} />
         <h2 className="font-display text-2xl font-semibold">
@@ -198,7 +198,7 @@ function VolunteerForm() {
           )}
         />
         {isAdult === false && (
-          <div className="grid gap-6 rounded-card bg-ivory-200/60 p-5 sm:grid-cols-2">
+          <div className="grid gap-6 rounded-3xl bg-mint-50 p-5 sm:grid-cols-2">
             <p className="text-sm text-ink-700 sm:col-span-2">
               Volunteers under 18 need permission from a parent or guardian. We will contact them
               too.
@@ -296,7 +296,7 @@ function VolunteerForm() {
         </Field>
       </fieldset>
 
-      <div className="flex flex-col gap-5 rounded-card bg-ivory-200/60 p-6">
+      <div className="flex flex-col gap-5 rounded-3xl bg-mint-50 p-6">
         <div id="f-consent_contact">
           <Checkbox
             label="I agree that PRAYASH volunteer coordinators may contact me about volunteering."
@@ -361,7 +361,7 @@ export function VolunteerPage() {
                   ))}
                 </ul>
               </Reveal>
-              <Reveal className="rounded-card bg-forest-50 p-6">
+              <Reveal className="rounded-3xl bg-forest-50 p-6">
                 <h3 className="mb-2 font-display text-lg font-semibold">What to expect</h3>
                 <Markdown className="text-[0.9375rem]">
                   {textOf(content, 'what_to_expect')}

@@ -55,7 +55,7 @@ function UpiCard({ donation }: { donation: DonationSettings }) {
   }, [uri]);
   if (!uri || !donation.upi_id) return null;
   return (
-    <div className="flex flex-col gap-5 rounded-card bg-ivory-50 p-6 shadow-soft sm:p-8">
+    <div className="flex flex-col gap-5 rounded-3xl bg-mint-50 p-6 shadow-soft sm:p-8">
       <h3 className="flex items-center gap-2 font-display text-xl font-semibold">
         <Smartphone aria-hidden="true" className="size-5 text-forest-700" /> Pay by UPI
       </h3>
@@ -110,7 +110,7 @@ function BankCard({ donation }: { donation: DonationSettings }) {
     ['IFSC', bank.ifsc],
   ].filter((r): r is [string, string] => Boolean(r[1]));
   return (
-    <div className="flex flex-col gap-5 rounded-card bg-ivory-50 p-6 shadow-soft sm:p-8">
+    <div className="flex flex-col gap-5 rounded-3xl bg-mint-50 p-6 shadow-soft sm:p-8">
       <h3 className="flex items-center gap-2 font-display text-xl font-semibold">
         <Landmark aria-hidden="true" className="size-5 text-forest-700" /> Bank transfer
       </h3>
@@ -163,7 +163,7 @@ function ReportForm() {
 
   if (result) {
     return (
-      <div role="status" className="flex flex-col gap-4 rounded-panel bg-ivory-50 p-8 shadow-soft">
+      <div role="status" className="flex flex-col gap-4 rounded-bento bg-mint-50 p-8 shadow-soft">
         <CheckCircle2 aria-hidden="true" className="size-10 text-success-700" strokeWidth={1.5} />
         {result === 'already_reported' ? (
           <>
@@ -378,7 +378,7 @@ export function DonatePage() {
         title={textOf(content, 'heading')}
         intro={textOf(content, 'intro')}
       >
-        <ButtonLink to="/transparency" variant="light">
+        <ButtonLink to="/transparency" variant="secondary">
           See how funds are reported
         </ButtonLink>
       </PageHero>
@@ -406,7 +406,7 @@ export function DonatePage() {
                 Only use the payment details shown on this page. PRAYASH will never ask for your UPI
                 PIN, OTP, card number or bank password.
               </Alert>
-              <div className="rounded-card bg-ivory-200/60 p-6">
+              <div className="rounded-3xl bg-mint-50 p-6">
                 <h3 className="mb-2 font-display text-lg font-semibold">
                   How contributions are used
                 </h3>
@@ -419,7 +419,7 @@ export function DonatePage() {
                 <h2 className="text-display-md font-semibold">Tell us about your donation</h2>
                 <Markdown className="text-[0.9375rem]">{textOf(content, 'after_paying')}</Markdown>
               </Reveal>
-              <div className="rounded-panel bg-ivory-50 p-6 shadow-soft sm:p-8">
+              <div className="rounded-bento bg-mint-50 p-6 shadow-soft sm:p-8">
                 <ReportForm />
               </div>
               <p className="flex items-start gap-2 text-sm text-ink-600">

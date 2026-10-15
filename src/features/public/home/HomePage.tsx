@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { m } from 'framer-motion';
-import { ArrowRight, BookOpen, HandHeart, HeartPulse, Home, Search, ShieldCheck, Users, Wheat } from 'lucide-react';
+import { ArrowRight, BookOpen, HandHeart, HeartPulse, Home, Lock, Search, ShieldCheck, Users, Wheat } from 'lucide-react';
 import { useEffect, useRef, type ReactNode, type RefObject } from 'react';
 import { Link } from 'react-router';
 import { ProjectCard } from '@/components/cards/ProjectCard';
@@ -8,6 +8,7 @@ import { ReportSummary } from '@/components/cards/ReportSummary';
 import { StatTile } from '@/components/cards/StatTile';
 import { VillageCard } from '@/components/cards/VillageCard';
 import { Container, Section, SectionHeading } from '@/components/layout/Container';
+import { LogoMark } from '@/components/layout/Logo';
 import { Photo } from '@/components/media/Photo';
 import { Reveal } from '@/components/motion/Reveal';
 import { QueryState } from '@/components/QueryState';
@@ -45,8 +46,8 @@ function useHeroParallax(root: RefObject<HTMLElement | null>, content: RefObject
         gsap.registerPlugin(ScrollTrigger);
         const ctx = gsap.context(() => {
           const trigger = { trigger: root.current, start: 'top top', end: 'bottom top', scrub: 0.6 };
-          if (content.current) gsap.to(content.current, { yPercent: -14, opacity: 0.25, ease: 'none', scrollTrigger: trigger });
-          if (visual.current) gsap.to(visual.current, { yPercent: 18, scale: 1.08, ease: 'none', scrollTrigger: trigger });
+          if (content.current) gsap.to(content.current, { yPercent: -8, ease: 'none', scrollTrigger: trigger });
+          if (visual.current) gsap.to(visual.current, { yPercent: 6, ease: 'none', scrollTrigger: trigger });
         }, root);
         revert = () => ctx.revert();
       })
@@ -81,67 +82,74 @@ function HomeHero({ content }: { content: PageContent }) {
       : {
           initial: { opacity: 0, y: '0.6em' },
           animate: { opacity: 1, y: 0 },
-          transition: { duration: 1.1, delay: 0.15 + i * 0.14, ease: [0.16, 1, 0.3, 1] as const },
+          transition: { duration: 1, delay: 0.1 + i * 0.12, ease: [0.16, 1, 0.3, 1] as const },
         };
   const fade = (delay: number) =>
     reduced ? {} : { initial: { opacity: 0, y: 16 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.9, delay, ease: [0.16, 1, 0.3, 1] as const } };
 
   return (
-    <section
-      ref={rootRef}
-      aria-labelledby="hero-title"
-      className="on-dark grain relative isolate flex min-h-[100svh] items-end overflow-hidden bg-forest-900 text-ivory-50"
-    >
-      {heroSrc && (
-        <img
-          src={heroSrc}
-          alt=""
-          aria-hidden="true"
-          fetchPriority="high"
-          className="absolute inset-0 -z-20 h-full w-full object-cover opacity-40 mix-blend-luminosity"
-        />
-      )}
-      <div ref={visualRef} className="absolute inset-0 -z-10 will-change-transform">
-        <HeroVisual />
-      </div>
-      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgb(7_26_18/0.55)_0%,transparent_30%,transparent_55%,rgb(7_26_18/0.9)_100%)]" />
-      <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[radial-gradient(60%_60%_at_15%_85%,rgb(23_75_53/0.85),transparent_70%)]" />
-
-      <Container size="wide" className="relative pt-40 pb-16 sm:pb-24 lg:pb-28">
-        <div ref={contentRef} className="flex max-w-5xl flex-col gap-7 will-change-transform">
-          <m.p className="eyebrow" {...fade(0)}>
-            PRAYASH · {textOf(content, 'hero_eyebrow')}
-          </m.p>
-          <h1 id="hero-title" className="text-display-2xl font-semibold">
-            {lines.map((line, i) => (
-              <span key={line} className="block overflow-hidden pb-[0.08em]">
-                <m.span className={i % 2 === 1 ? 'block text-gold-300' : 'block'} {...lineMotion(i)}>
-                  {line}
-                </m.span>
-              </span>
-            ))}
-          </h1>
-          <m.p className="text-lead max-w-2xl text-ivory-100/85" {...fade(0.45)}>
-            {textOf(content, 'hero_body')}
-          </m.p>
-          <m.div className="flex flex-wrap gap-3 pt-2" {...fade(0.6)}>
-            <ButtonLink to="/request-help" variant="gold" size="lg" iconRight={<ArrowRight aria-hidden="true" className="size-4" />}>
-              Request help
-            </ButtonLink>
-            <ButtonLink to="/support-us" variant="light" size="lg">
-              Support us
-            </ButtonLink>
-          </m.div>
-        </div>
-        {!reduced && (
-          <div aria-hidden="true" className="absolute right-8 bottom-10 hidden flex-col items-center gap-3 text-xs tracking-[0.3em] text-ivory-100/60 uppercase lg:flex">
-            <span className="[writing-mode:vertical-rl]">Scroll</span>
-            <span className="relative h-14 w-px overflow-hidden bg-white/15">
-              <span className="absolute inset-x-0 top-0 h-1/2 animate-[scrollcue_2.4s_ease-in-out_infinite] bg-gold-300" />
-            </span>
+    <section ref={rootRef} aria-labelledby="hero-title" className="px-2 pt-24 sm:px-4 sm:pt-28">
+      <div className="bg-mesh relative overflow-hidden rounded-bento">
+        <div aria-hidden="true" className="pointer-events-none absolute -top-32 -left-24 size-96 rounded-full border-[32px] border-white/50" />
+        <Container size="wide" className="relative grid items-center gap-10 py-12 sm:py-16 lg:grid-cols-[1.1fr_1fr] lg:gap-14 lg:py-20">
+          <div ref={contentRef} className="flex flex-col gap-6 will-change-transform">
+            <m.p className="eyebrow" {...fade(0)}>
+              {textOf(content, 'hero_eyebrow')}
+            </m.p>
+            <h1 id="hero-title" className="text-display-xl font-semibold text-ink-900">
+              {lines.map((line, i) => (
+                <span key={line} className="block overflow-hidden pb-[0.08em]">
+                  <m.span className={i % 2 === 1 ? 'block text-leaf-700' : 'block'} {...lineMotion(i)}>
+                    {line}
+                  </m.span>
+                </span>
+              ))}
+            </h1>
+            <m.p className="text-lead max-w-xl text-ink-700" {...fade(0.35)}>
+              {textOf(content, 'hero_body')}
+            </m.p>
+            <m.div className="flex flex-wrap gap-3 pt-1" {...fade(0.5)}>
+              <ButtonLink to="/request-help" size="lg" iconRight={<ArrowRight aria-hidden="true" className="size-4" />}>
+                Request help
+              </ButtonLink>
+              <ButtonLink to="/support-us" variant="secondary" size="lg" iconLeft={<HandHeart aria-hidden="true" className="size-4" />}>
+                Support us
+              </ButtonLink>
+            </m.div>
+            <m.ul className="flex flex-wrap gap-x-6 gap-y-3 pt-3 text-sm text-ink-700" {...fade(0.65)}>
+              {[
+                { icon: Lock, text: 'Requests kept private' },
+                { icon: ShieldCheck, text: 'Every rupee verified' },
+                { icon: Users, text: 'Friends & well-wishers from nearby villages' },
+              ].map(({ icon: Icon, text }) => (
+                <li key={text} className="flex items-center gap-2">
+                  <span className="flex size-7 items-center justify-center rounded-full bg-white text-forest-700 shadow-card">
+                    <Icon aria-hidden="true" className="size-3.5" />
+                  </span>
+                  {text}
+                </li>
+              ))}
+            </m.ul>
           </div>
-        )}
-      </Container>
+
+          <div ref={visualRef} className="relative will-change-transform">
+            <div className="on-dark relative aspect-[4/3] overflow-hidden rounded-[1.75rem] bg-forest-800 shadow-float sm:aspect-[16/11] lg:aspect-[4/5]">
+              {heroSrc ? (
+                <img src={heroSrc} alt={heroMedia.data?.alt_text ?? ''} fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />
+              ) : (
+                <>
+                  <HeroVisual />
+                  <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(80%_60%_at_30%_100%,rgb(7_26_18/0.7),transparent_70%)]" />
+                </>
+              )}
+            </div>
+            <div className="absolute -bottom-5 left-4 flex max-w-[16rem] items-center gap-3 rounded-2xl bg-white p-3 pr-4 shadow-float sm:left-6">
+              <LogoMark className="size-10" />
+              <p className="text-sm leading-snug font-medium text-ink-800">Together for Humanity. Together for a Better Tomorrow.</p>
+            </div>
+          </div>
+        </Container>
+      </div>
     </section>
   );
 }
@@ -150,10 +158,11 @@ function IntroSection({ content }: { content: PageContent }) {
   const media = useQuery({ queryKey: ['latest-media'], queryFn: () => fetchLatestPublicMedia(3), enabled: isBackendConfigured });
   const photos = media.data ?? [];
   const areas = itemsOf(content, 'help_areas');
+  const [lead, ...rest] = areas;
   return (
-    <Section tone="ivory" labelledBy="intro-heading" padding="loose">
+    <Section tone="white" labelledBy="intro-heading">
       <Container>
-        <div className="grid items-center gap-14 lg:grid-cols-[1.05fr_1fr] lg:gap-20">
+        <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
           <Reveal className="flex flex-col gap-6">
             <p className="eyebrow">Who we are</p>
             <h2 id="intro-heading" className="text-display-lg font-semibold">
@@ -172,40 +181,61 @@ function IntroSection({ content }: { content: PageContent }) {
           <Reveal delay={0.1} className="grid grid-cols-6 grid-rows-6 gap-3 sm:gap-4" y={40}>
             <Photo
               media={photos[0]}
-              className="col-span-4 row-span-4 aspect-[4/3] rounded-card shadow-lift"
+              className="col-span-4 row-span-4 aspect-[4/3] overflow-hidden rounded-3xl shadow-card"
               placeholderLabel="Community photograph to be added"
               sizes="(min-width: 1024px) 30vw, 66vw"
             />
             <Photo
               media={photos[1]}
-              className="col-span-2 col-start-5 row-span-3 row-start-2 rounded-card"
+              className="col-span-2 col-start-5 row-span-3 row-start-2 overflow-hidden rounded-3xl"
               placeholderLabel="Photograph to be added"
               sizes="15vw"
             />
             <Photo
               media={photos[2]}
-              className="col-span-3 col-start-3 row-span-2 row-start-5 aspect-[16/9] rounded-card"
+              className="col-span-3 col-start-3 row-span-2 row-start-5 aspect-[16/9] overflow-hidden rounded-3xl"
               placeholderLabel="Photograph to be added"
               sizes="25vw"
             />
           </Reveal>
         </div>
 
-        {areas.length > 0 && (
-          <ul className="mt-24 grid gap-px overflow-hidden rounded-panel bg-ink-900/8 sm:grid-cols-2 lg:grid-cols-4">
-            {areas.map((area, i) => {
-              const Icon = AREA_ICONS[i % AREA_ICONS.length]!;
-              return (
-                <Reveal as="li" key={area.title} delay={i * 0.06} className="flex flex-col gap-4 bg-ivory-50 p-7 sm:p-8">
-                  <span className="flex size-12 items-center justify-center rounded-full bg-forest-50 text-forest-700">
-                    <Icon aria-hidden="true" className="size-6" strokeWidth={1.6} />
-                  </span>
-                  <h3 className="font-display text-lg font-semibold">{area.title}</h3>
-                  <p className="text-[0.9375rem] leading-relaxed text-ink-600">{area.body}</p>
-                </Reveal>
-              );
-            })}
-          </ul>
+        {lead && (
+          <div className="mt-20">
+            <div className="mb-8 flex flex-col gap-3">
+              <p className="eyebrow">How we help</p>
+              <h2 className="text-display-md font-semibold">Support where it is needed most</h2>
+            </div>
+            <ul className="grid auto-rows-fr gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <Reveal as="li" className="on-dark flex flex-col justify-between gap-10 rounded-bento bg-forest-800 p-8 text-ivory-50 sm:col-span-2 lg:row-span-2 sm:p-10">
+                <span className="flex size-14 items-center justify-center rounded-2xl bg-white/10 text-gold-300">
+                  <BookOpen aria-hidden="true" className="size-7" strokeWidth={1.6} />
+                </span>
+                <div className="flex flex-col gap-3">
+                  <h3 className="font-display text-2xl font-semibold sm:text-3xl">{lead.title}</h3>
+                  <p className="max-w-md text-ivory-100/85">{lead.body}</p>
+                </div>
+              </Reveal>
+              {rest.map((area, i) => {
+                const Icon = AREA_ICONS[(i + 1) % AREA_ICONS.length]!;
+                return (
+                  <Reveal as="li" key={area.title} delay={(i + 1) * 0.06} className="flex flex-col gap-4 rounded-bento bg-mint-50 p-7 ring-1 ring-forest-700/[0.06]">
+                    <span className="flex size-12 items-center justify-center rounded-2xl bg-white text-forest-700 shadow-card">
+                      <Icon aria-hidden="true" className="size-6" strokeWidth={1.6} />
+                    </span>
+                    <h3 className="font-display text-lg font-semibold">{area.title}</h3>
+                    <p className="text-[0.9375rem] leading-relaxed text-ink-700">{area.body}</p>
+                  </Reveal>
+                );
+              })}
+              <Reveal as="li" delay={0.3} className="flex flex-col justify-between gap-6 rounded-bento bg-gold-100 p-7">
+                <p className="font-display text-lg leading-snug font-semibold text-ink-900">Need support for yourself or someone you know?</p>
+                <Link to="/request-help" className="inline-flex items-center gap-2 font-medium text-forest-800 underline-offset-4 hover:underline">
+                  Ask for help <ArrowRight aria-hidden="true" className="size-4" />
+                </Link>
+              </Reveal>
+            </ul>
+          </div>
         )}
       </Container>
     </Section>
@@ -225,20 +255,21 @@ function ActionCard({
   body: string;
   primary: { to: string; label: string };
   secondary: { to: string; label: string; icon: ReactNode };
-  tone: 'forest' | 'gold';
+  tone: 'forest' | 'mint';
 }) {
   return (
     <Reveal
       className={
         tone === 'forest'
-          ? 'on-dark grain relative flex flex-col gap-5 overflow-hidden rounded-panel bg-forest-700 p-8 text-ivory-50 sm:p-12'
-          : 'relative flex flex-col gap-5 overflow-hidden rounded-panel bg-gold-100 p-8 text-ink-900 sm:p-12'
+          ? 'on-dark relative flex flex-col gap-5 overflow-hidden rounded-bento bg-forest-700 p-8 text-ivory-50 sm:p-12'
+          : 'relative flex flex-col gap-5 overflow-hidden rounded-bento bg-mint-100 p-8 text-ink-900 sm:p-12'
       }
     >
+      <div aria-hidden="true" className={tone === 'forest' ? 'absolute -right-16 -bottom-16 size-56 rounded-full border-[24px] border-white/5' : 'absolute -right-16 -bottom-16 size-56 rounded-full border-[24px] border-white/60'} />
       <p className="eyebrow">{eyebrow}</p>
       <h2 className="text-display-md font-semibold">{title}</h2>
       <p className={tone === 'forest' ? 'max-w-md text-ivory-100/85' : 'max-w-md text-ink-700'}>{body}</p>
-      <div className="mt-auto flex flex-wrap items-center gap-x-5 gap-y-3 pt-4">
+      <div className="relative mt-auto flex flex-wrap items-center gap-x-5 gap-y-3 pt-4">
         <ButtonLink to={primary.to} variant={tone === 'forest' ? 'gold' : 'primary'} iconRight={<ArrowRight aria-hidden="true" className="size-4" />}>
           {primary.label}
         </ButtonLink>
@@ -260,9 +291,9 @@ function ActionCard({
 
 function ActionsSection() {
   return (
-    <Section tone="ivory" padding="tight" className="pt-0 sm:pt-0">
+    <Section tone="white" padding="tight" className="pt-0 sm:pt-0">
       <Container>
-        <div className="grid gap-5 lg:grid-cols-2">
+        <div className="grid gap-4 lg:grid-cols-2">
           <ActionCard
             tone="forest"
             eyebrow="Need support?"
@@ -272,7 +303,7 @@ function ActionsSection() {
             secondary={{ to: '/request-help/status', label: 'Check an existing request', icon: <Search aria-hidden="true" className="size-4" /> }}
           />
           <ActionCard
-            tone="gold"
+            tone="mint"
             eyebrow="Want to help?"
             title="Support people in need"
             body="Contribute through PRAYASH's official payment method, or give your time and skills as a volunteer."
@@ -305,7 +336,7 @@ function FeaturedProjects() {
           loading={
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {[0, 1, 2].map((i) => (
-                <Skeleton key={i} className="h-96 rounded-card" />
+                <Skeleton key={i} className="h-96 rounded-3xl" />
               ))}
             </div>
           }
@@ -347,12 +378,12 @@ function ImpactSection() {
           <QueryState
             query={query}
             enabled={isBackendConfigured}
-            loading={<Skeleton className="h-64 rounded-card bg-white/10" />}
+            loading={<Skeleton className="h-64 rounded-3xl bg-white/10" />}
             isEmpty={(d) =>
               d.projects_completed + d.projects_ongoing + d.villages_reached + d.active_volunteers === 0 && d.featured_outcomes.length === 0
             }
             empty={
-              <div className="rounded-card border border-white/15 p-8 text-ivory-100/85">
+              <div className="rounded-3xl border border-white/15 p-8 text-ivory-100/85">
                 <p className="font-display text-xl font-semibold text-ivory-50">Impact figures will appear here</p>
                 <p className="mt-2">As projects are published and their outcomes verified, the totals on this page update automatically.</p>
               </div>
@@ -369,7 +400,7 @@ function ImpactSection() {
                 {d.featured_outcomes.length > 0 && (
                   <ul className="grid gap-4 sm:grid-cols-2">
                     {d.featured_outcomes.map((o) => (
-                      <li key={o.id} className="flex flex-col gap-1 rounded-card bg-white/5 p-6 shadow-[inset_0_0_0_1px_rgb(255_255_255/0.08)]">
+                      <li key={o.id} className="flex flex-col gap-1 rounded-3xl bg-white/5 p-6 shadow-[inset_0_0_0_1px_rgb(255_255_255/0.08)]">
                         {o.quantity !== null && (
                           <p className="font-display text-3xl font-semibold text-gold-300 tabular-nums">
                             {formatNumber(Number(o.quantity))}
@@ -396,7 +427,7 @@ function ImpactSection() {
 function VillagesSection() {
   const query = useQuery({ queryKey: ['villages', 'public'], queryFn: fetchPublishedVillages, enabled: isBackendConfigured });
   return (
-    <Section tone="ivory" labelledBy="villages-heading">
+    <Section tone="white" labelledBy="villages-heading">
       <Container>
         <div className="mb-12 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
           <SectionHeading eyebrow="Villages we serve" title="Village-level activities" id="villages-heading">
@@ -410,7 +441,7 @@ function VillagesSection() {
           query={query}
           enabled={isBackendConfigured}
           isEmpty={(rows) => rows.length === 0}
-          loading={<Skeleton className="h-72 rounded-card" />}
+          loading={<Skeleton className="h-72 rounded-3xl" />}
           empty={<EmptyState title="Villages will be listed here" description="The village directory is published by PRAYASH once each village page has been reviewed." />}
         >
           {(rows) => (
@@ -430,9 +461,9 @@ function VillagesSection() {
 
 function VolunteerSection({ content }: { content: PageContent }) {
   return (
-    <Section tone="sand" labelledBy="volunteer-heading" padding="loose">
+    <Section tone="sand" labelledBy="volunteer-heading" padding="loose" className="mx-2 rounded-bento sm:mx-4">
       <Container>
-        <Reveal className="relative overflow-hidden rounded-panel bg-ivory-50 px-6 py-14 shadow-soft sm:px-14 sm:py-20">
+        <Reveal className="relative overflow-hidden rounded-bento bg-white px-6 py-14 shadow-card ring-1 ring-forest-700/[0.06] sm:px-14 sm:py-20">
           <div aria-hidden="true" className="absolute -top-24 -right-24 size-80 rounded-full bg-[radial-gradient(circle,var(--color-gold-200),transparent_70%)] opacity-70" />
           <div className="relative grid items-center gap-10 lg:grid-cols-[1.4fr_1fr]">
             <div className="flex flex-col gap-5">
@@ -473,12 +504,12 @@ function TransparencySection({ content }: { content: PageContent }) {
               </ButtonLink>
             </div>
           </Reveal>
-          <Reveal delay={0.1} className="rounded-panel bg-white/[0.04] p-7 shadow-[inset_0_0_0_1px_rgb(255_255_255/0.08)] sm:p-10">
+          <Reveal delay={0.1} className="rounded-bento bg-white/[0.04] p-7 shadow-[inset_0_0_0_1px_rgb(255_255_255/0.08)] sm:p-10">
             <QueryState
               query={query}
               enabled={isBackendConfigured}
               isEmpty={(rows) => rows.length === 0}
-              loading={<Skeleton className="h-48 rounded-card bg-white/10" />}
+              loading={<Skeleton className="h-48 rounded-3xl bg-white/10" />}
               empty={
                 <div className="text-ivory-100/85">
                   <p className="font-display text-xl font-semibold text-ivory-50">No reports published yet</p>
@@ -514,6 +545,7 @@ export function HomePage() {
       <ImpactSection />
       <VillagesSection />
       <VolunteerSection content={content} />
+      <div className="h-4" aria-hidden="true" />
       <TransparencySection content={content} />
     </>
   );
