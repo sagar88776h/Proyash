@@ -32,11 +32,11 @@ function Row({
     <tr className="border-b border-ink-100 last:border-0">
       <th
         scope="row"
-        className={`py-3 pr-4 text-left ${strong ? 'font-semibold' : 'font-normal text-ink-700'} ${indent ? 'pl-5' : ''}`}
+        className={`py-3 pr-4 text-left break-words ${strong ? 'font-semibold' : 'font-normal text-ink-700'} ${indent ? 'pl-5' : ''}`}
       >
         {label}
       </th>
-      <td className={`py-3 text-right tabular-nums ${strong ? 'font-semibold' : ''}`}>
+      <td className={`py-3 text-right whitespace-nowrap tabular-nums ${strong ? 'font-semibold' : ''}`}>
         {formatINR(value)}
       </td>
     </tr>
@@ -125,10 +125,10 @@ export function ReportPage() {
         </div>
       </section>
       <Section tone="ivory">
-        <Container className="grid gap-12 lg:grid-cols-[1.4fr_1fr]">
+        <Container className="grid grid-cols-1 gap-12 lg:grid-cols-[1.4fr_1fr]">
           <div className="flex flex-col gap-10">
-            <div className="overflow-x-auto rounded-3xl bg-mint-50 p-6 shadow-soft sm:p-8">
-              <table className="w-full min-w-[22rem] text-[0.9375rem]">
+            <div className="rounded-3xl bg-mint-50 p-6 shadow-soft sm:p-8">
+              <table className="w-full text-[0.9375rem]">
                 <caption className="mb-4 text-left font-display text-xl font-semibold">
                   Summary of accounts
                 </caption>
@@ -174,7 +174,7 @@ export function ReportPage() {
               </p>
             </div>
             {(s.projects?.length ?? 0) > 0 && (
-              <div className="overflow-x-auto rounded-3xl bg-mint-50 p-6 shadow-soft sm:p-8">
+              <div className="rounded-3xl bg-mint-50 p-6 shadow-soft sm:p-8">
                 <table className="w-full text-[0.9375rem]">
                   <caption className="mb-4 text-left font-display text-xl font-semibold">
                     Spending by project
@@ -182,7 +182,7 @@ export function ReportPage() {
                   <tbody>
                     {s.projects.map((p) => (
                       <tr key={p.project_id} className="border-b border-ink-100 last:border-0">
-                        <th scope="row" className="py-3 pr-4 text-left font-normal">
+                        <th scope="row" className="py-3 pr-4 text-left font-normal break-words">
                           <Link
                             to={`/our-work/${p.slug}`}
                             className="text-forest-700 hover:underline"
@@ -190,7 +190,7 @@ export function ReportPage() {
                             {p.title}
                           </Link>
                         </th>
-                        <td className="py-3 text-right tabular-nums">
+                        <td className="py-3 text-right whitespace-nowrap tabular-nums">
                           {formatINR(Number(p.expenditure))}
                         </td>
                       </tr>

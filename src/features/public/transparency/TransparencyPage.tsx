@@ -59,39 +59,66 @@ export function TransparencyPage() {
                   <ReportSummary report={rows[0]!} />
                 </div>
                 {rows.length > 1 && (
-                  <div className="overflow-x-auto rounded-3xl bg-mint-50 shadow-soft">
-                    <table className="w-full min-w-[40rem] text-left text-[0.9375rem]">
-                      <caption className="sr-only">Earlier financial reports</caption>
-                      <thead className="border-b border-ink-100 text-sm text-ink-600">
-                        <tr>
-                          <th scope="col" className="px-5 py-3 font-medium">Report</th>
-                          <th scope="col" className="px-5 py-3 font-medium">Period</th>
-                          <th scope="col" className="px-5 py-3 text-right font-medium">Received</th>
-                          <th scope="col" className="px-5 py-3 text-right font-medium">Spent</th>
-                          <th scope="col" className="px-5 py-3"><span className="sr-only">Open</span></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {rows.slice(1).map((r) => (
-                          <tr key={r.id} className="border-b border-ink-100 last:border-0">
-                            <th scope="row" className="px-5 py-4 font-medium">
-                              {r.title}
-                              <span className="block text-xs font-normal text-ink-600">{REPORT_PERIOD_LABELS[r.period_type]}</span>
-                            </th>
-                            <td className="px-5 py-4 text-ink-700">{formatDate(r.period_start)} – {formatDate(r.period_end)}</td>
-                            <td className="px-5 py-4 text-right tabular-nums">{formatINR(reportIncome(r), { whole: true })}</td>
-                            <td className="px-5 py-4 text-right tabular-nums">{formatINR(reportSpending(r), { whole: true })}</td>
-                            <td className="px-5 py-4 text-right">
-                              <Link to={`/transparency/${r.id}`} className="inline-flex items-center gap-1 font-medium text-forest-700 hover:underline">
-                                View <ArrowRight aria-hidden="true" className="size-4" />
-                                <span className="sr-only"> {r.title}</span>
-                              </Link>
-                            </td>
+                  <>
+                    {/* Phones: one card per report, so nothing scrolls sideways. */}
+                    <ul aria-label="Earlier financial reports" className="flex flex-col gap-3 md:hidden">
+                      {rows.slice(1).map((r) => (
+                        <li key={r.id} className="rounded-3xl bg-mint-50 p-5 shadow-soft">
+                          <p className="font-medium">{r.title}</p>
+                          <p className="text-sm text-ink-600">
+                            {REPORT_PERIOD_LABELS[r.period_type]} · {formatDate(r.period_start)} – {formatDate(r.period_end)}
+                          </p>
+                          <dl className="mt-3 grid grid-cols-2 gap-3 text-[0.9375rem]">
+                            <div>
+                              <dt className="text-sm text-ink-600">Received</dt>
+                              <dd className="tabular-nums">{formatINR(reportIncome(r), { whole: true })}</dd>
+                            </div>
+                            <div>
+                              <dt className="text-sm text-ink-600">Spent</dt>
+                              <dd className="tabular-nums">{formatINR(reportSpending(r), { whole: true })}</dd>
+                            </div>
+                          </dl>
+                          <Link to={`/transparency/${r.id}`} className="mt-2 inline-flex min-h-11 items-center gap-1 font-medium text-forest-700 hover:underline">
+                            View report <ArrowRight aria-hidden="true" className="size-4" />
+                            <span className="sr-only"> {r.title}</span>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="hidden rounded-3xl bg-mint-50 shadow-soft md:block">
+                      <table className="w-full text-left text-[0.9375rem]">
+                        <caption className="sr-only">Earlier financial reports</caption>
+                        <thead className="border-b border-ink-100 text-sm text-ink-600">
+                          <tr>
+                            <th scope="col" className="px-5 py-3 font-medium">Report</th>
+                            <th scope="col" className="px-5 py-3 font-medium">Period</th>
+                            <th scope="col" className="px-5 py-3 text-right font-medium">Received</th>
+                            <th scope="col" className="px-5 py-3 text-right font-medium">Spent</th>
+                            <th scope="col" className="px-5 py-3"><span className="sr-only">Open</span></th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                        </thead>
+                        <tbody>
+                          {rows.slice(1).map((r) => (
+                            <tr key={r.id} className="border-b border-ink-100 last:border-0">
+                              <th scope="row" className="px-5 py-4 font-medium">
+                                {r.title}
+                                <span className="block text-xs font-normal text-ink-600">{REPORT_PERIOD_LABELS[r.period_type]}</span>
+                              </th>
+                              <td className="px-5 py-4 text-ink-700">{formatDate(r.period_start)} – {formatDate(r.period_end)}</td>
+                              <td className="px-5 py-4 text-right tabular-nums">{formatINR(reportIncome(r), { whole: true })}</td>
+                              <td className="px-5 py-4 text-right tabular-nums">{formatINR(reportSpending(r), { whole: true })}</td>
+                              <td className="px-5 py-4 text-right">
+                                <Link to={`/transparency/${r.id}`} className="inline-flex items-center gap-1 font-medium text-forest-700 hover:underline">
+                                  View <ArrowRight aria-hidden="true" className="size-4" />
+                                  <span className="sr-only"> {r.title}</span>
+                                </Link>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </>
                 )}
               </div>
             )}

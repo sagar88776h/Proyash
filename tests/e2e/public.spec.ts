@@ -1,5 +1,7 @@
-import { sql } from '../helpers/stack';
+import { createUser, sql } from '../helpers/stack';
 import { expect, expectAccessible, test } from './fixtures';
+
+const SEED_REPORTS = ['e2e00000-0000-4000-8000-000000000001', 'e2e00000-0000-4000-8000-000000000002'];
 
 // Published data so data-driven sections (villages, projects) actually render.
 test.beforeAll(async () => {
@@ -12,7 +14,40 @@ test.beforeAll(async () => {
      from public.villages where slug = 'e2e-seed-village'
      on conflict (slug) do nothing`,
   );
+  // Two published reports, so the report page and the earlier-reports list render.
+  const [{ n }] = await sql<{ n: number }>('select count(*)::int as n from public.financial_reports where id = any($1)', [SEED_REPORTS]);
+  if (n < SEED_REPORTS.length) {
+    const preparer = await createUser(['treasurer'], 'e2e-preparer');
+    const approver = await createUser(['treasurer'], 'e2e-approver');
+    const summary = {
+      version: 1,
+      currency: 'INR',
+      period: { start: '2026-04-01', end: '2026-06-30' },
+      income: { member_contributions: 1250000, public_donations: 4875050, other_income: 0 },
+      opening_balance: 980000,
+      opening_balances_recorded: 0,
+      expenditure_total: 3412500,
+      expenditure_by_category: { education_support: 1850000, medical_support: 1562500 },
+      projects: [],
+      other_project_expenditure: 0,
+      refunds: 0,
+      allocations: 0,
+      closing_balance: 3692550,
+      contribution_count: 42,
+      expense_count: 17,
+    };
+    for (const [i, id] of SEED_REPORTS.entries()) {
+      await sql(
+        `insert into public.financial_reports
+           (id, title, period_type, period_start, period_end, summary, status, prepared_by, approved_by, published_at)
+         values ($1, $2, 'quarterly', $3, $4, $5, 'published', $6, $7, now())
+         on conflict (id) do nothing`,
+        [id, `Quarterly accounts seed report ${i + 1}`, i ? '2026-01-01' : '2026-04-01', i ? '2026-03-31' : '2026-06-30', summary, preparer.id, approver.id],
+      );
+    }
+  }
 });
+
 
 const PAGES = [
   { path: '/', name: 'Home' },
@@ -26,6 +61,7 @@ const PAGES = [
   { path: '/support-us', name: 'Support Us' },
   { path: '/volunteer', name: 'Volunteer' },
   { path: '/transparency', name: 'Transparency' },
+  { path: `/transparency/${SEED_REPORTS[0]}`, name: 'Financial report' },
   { path: '/contact', name: 'Contact' },
   { path: '/privacy', name: 'Privacy' },
   { path: '/terms', name: 'Terms' },

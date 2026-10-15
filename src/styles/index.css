@@ -262,6 +262,14 @@
   }
 
   /* Public site: eyebrow labels become soft pills with a dot */
+  /* Nothing may widen the page: long words, emails and IDs wrap, and grid
+     columns may shrink below their content's natural width. */
+  .public-site {
+    overflow-wrap: break-word;
+  }
+  .public-site .grid > * {
+    min-width: 0;
+  }
   .public-site .eyebrow {
     display: inline-flex;
     width: fit-content;

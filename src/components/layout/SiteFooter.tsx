@@ -74,7 +74,7 @@ export function SiteFooter() {
                     )}
                     {contact.email && (
                       <ContactLine icon={<Mail className="size-4" aria-hidden="true" />}>
-                        <a href={`mailto:${contact.email}`} className="hover:text-gold-300">
+                        <a href={`mailto:${contact.email}`} className="break-all hover:text-gold-300">
                           {contact.email}
                         </a>
                       </ContactLine>

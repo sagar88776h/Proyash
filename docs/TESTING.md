@@ -22,11 +22,11 @@ npm run test:e2e                    # builds the site, serves it with the produc
 | Deno type-check of both Edge Functions | Pass |
 | ESLint (incl. `jsx-a11y`, React Compiler rules) | Pass, 0 errors, 0 warnings |
 | Production build (`npm run build`) | Pass |
-| Unit tests (Vitest, jsdom) | **54 / 54 passed** (5 files) |
+| Unit tests (Vitest, jsdom) | **76 / 76 passed** (6 files) |
 | Database tests (RLS, roles, workflows, finance, storage, MFA) | **75 + 1 passed** (6 files) |
 | Edge Function end-to-end tests | **24 / 24 passed** (2 files) |
 | Database + functions combined, on a freshly reset database | **100 / 100 passed** |
-| Browser end-to-end tests (Playwright, Chromium) | **83 passed, 3 skipped by design, 0 failed** — see note |
+| Browser end-to-end tests (Playwright, Chromium) | **92 passed, 3 skipped by design, 0 failed** — see note |
 | `npm audit --omit=dev` (production dependencies) | 0 vulnerabilities |
 
 The three skipped browser tests are viewport-specific by design (desktop
@@ -84,7 +84,7 @@ consented photos; redaction deleting files.
 **Browser (Playwright)** — the site is built for production and served with
 the Content-Security-Policy from `vercel.json`; any console error, uncaught
 exception or CSP violation fails a test.
-- All 12 public pages at **desktop (1440 px), tablet (820 px) and phone
+- All public pages (including a village, a project and a published financial report) at **desktop (1440 px), tablet (820 px) and phone
   (Pixel 7, 412 px)**: one `h1`, footer, **axe WCAG 2.2 A/AA** with no serious or
   critical violations, no horizontal overflow, no control outside the viewport.
 - Navigation, skip link, mobile menu (Escape closes it and returns focus), 404,
@@ -118,6 +118,9 @@ exception or CSP violation fails a test.
   contrast.
 - Public forms disabled their button without explanation when the site has no
   database connection.
+- Published financial reports made the page scroll sideways on phones (the
+  accounts table had a fixed minimum width); earlier reports now show as cards
+  on phones.
 - Earlier phases: a Postgres regular-expression limit broke UPI validation;
   re-reversal after a rejected reversal was blocked; donor reports had no
   account to verify into; generated database types were mis-ordered.
