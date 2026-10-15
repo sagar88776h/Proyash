@@ -8,13 +8,12 @@ import { ReportSummary } from '@/components/cards/ReportSummary';
 import { StatTile } from '@/components/cards/StatTile';
 import { VillageCard } from '@/components/cards/VillageCard';
 import { Container, Section, SectionHeading } from '@/components/layout/Container';
-import { LogoMark } from '@/components/layout/Logo';
 import { Photo } from '@/components/media/Photo';
 import { Reveal } from '@/components/motion/Reveal';
 import { QueryState } from '@/components/QueryState';
 import { ButtonLink } from '@/components/ui/Button';
 import { EmptyState, Skeleton } from '@/components/ui/Feedback';
-import { HeroVisual } from '@/components/visual/HeroVisual';
+import { VillageDawn } from '@/components/visual/VillageDawn';
 import { itemsOf, textOf, type PageContent } from '@/content/registry';
 import { useContent } from '@/content/useContent';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
@@ -89,9 +88,12 @@ function HomeHero({ content }: { content: PageContent }) {
 
   return (
     <section ref={rootRef} aria-labelledby="hero-title" className="px-2 pt-24 sm:px-4 sm:pt-28">
-      <div className="bg-mesh relative overflow-hidden rounded-bento">
-        <div aria-hidden="true" className="pointer-events-none absolute -top-32 -left-24 size-96 rounded-full border-[32px] border-white/50" />
-        <Container size="wide" className="relative grid items-center gap-10 py-12 sm:py-16 lg:grid-cols-[1.1fr_1fr] lg:gap-14 lg:py-20">
+      <div className="relative isolate overflow-hidden rounded-bento">
+        <VillageDawn className="-z-10" />
+        <Container
+          size="wide"
+          className="relative grid items-start gap-10 pt-12 pb-[clamp(150px,34vw,260px)] sm:pt-16 lg:grid-cols-[1.15fr_1fr] lg:gap-14 lg:pt-16 lg:pb-32"
+        >
           <div ref={contentRef} className="flex flex-col gap-6 will-change-transform">
             <m.p className="eyebrow" {...fade(0)}>
               {textOf(content, 'hero_eyebrow')}
@@ -132,22 +134,16 @@ function HomeHero({ content }: { content: PageContent }) {
             </m.ul>
           </div>
 
-          <div ref={visualRef} className="relative will-change-transform">
-            <div className="on-dark relative aspect-[4/3] overflow-hidden rounded-[1.75rem] bg-forest-800 shadow-float sm:aspect-[16/11] lg:aspect-[4/5]">
-              {heroSrc ? (
-                <img src={heroSrc} alt={heroMedia.data?.alt_text ?? ''} fetchPriority="high" className="absolute inset-0 h-full w-full object-cover" />
-              ) : (
-                <>
-                  <HeroVisual />
-                  <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(80%_60%_at_30%_100%,rgb(7_26_18/0.7),transparent_70%)]" />
-                </>
-              )}
+          {heroSrc && (
+            <div ref={visualRef} className="relative will-change-transform">
+              <img
+                src={heroSrc}
+                alt={heroMedia.data?.alt_text ?? ''}
+                fetchPriority="high"
+                className="aspect-[4/3] w-full rounded-[1.75rem] object-cover shadow-float ring-4 ring-white/70"
+              />
             </div>
-            <div className="absolute -bottom-5 left-4 flex max-w-[16rem] items-center gap-3 rounded-2xl bg-white p-3 pr-4 shadow-float sm:left-6">
-              <LogoMark className="size-10" />
-              <p className="text-sm leading-snug font-medium text-ink-800">Together for Humanity. Together for a Better Tomorrow.</p>
-            </div>
-          </div>
+          )}
         </Container>
       </div>
     </section>

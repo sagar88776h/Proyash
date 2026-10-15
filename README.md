@@ -24,8 +24,8 @@ strengthen the community.
 ## Technology
 
 React 19 · Vite · TypeScript · Tailwind CSS 4 · TanStack Query · React Hook
-Form + Zod · Framer Motion, GSAP and a small Three.js scene (all lazy-loaded,
-with reduced-motion and no-WebGL fallbacks) · Supabase (Postgres with Row
+Form + Zod · Framer Motion and GSAP (lazy-loaded, off for reduced motion),
+an SVG “Village Dawn” hero · Supabase (Postgres with Row
 Level Security, Auth with TOTP MFA, Storage, Edge Functions on Deno) · Vercel.
 
 ## Repository layout

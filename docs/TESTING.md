@@ -88,7 +88,7 @@ exception or CSP violation fails a test.
   (Pixel 7, 412 px)**: one `h1`, footer, **axe WCAG 2.2 A/AA** with no serious or
   critical violations, no horizontal overflow, no control outside the viewport.
 - Navigation, skip link, mobile menu (Escape closes it and returns focus), 404,
-  reduced motion (no WebGL canvas, no hidden content), legal draft notices, no
+  reduced motion (no canvas, no hidden content), legal draft notices, no
   card/PIN/password fields on the donation page, `/admin` not indexed and
   behind sign-in.
 - Forms on desktop and phone: request for help (error summary focus, reference
@@ -130,7 +130,8 @@ exception or CSP violation fails a test.
   administrator role, refuses a second run without inviting anyone, and refuses
   keys passed as command-line arguments.
 - Initial page weight: about **164 KB gzipped** (JS + CSS) for the home page;
-  the 132 KB Three.js scene loads only on capable devices after first paint;
+  the animated hero is plain SVG and CSS (the earlier 132 KB Three.js scene
+  was removed);
   fonts are self-hosted and subset.
 
 ## Test environment and limits
@@ -151,4 +152,4 @@ Supabase project before launch:
 - Browsers other than Chromium (WebKit/Firefox are not installed here) and
   real phones; screen readers were not used — accessibility is covered by axe
   and keyboard tests only.
-- Visual review of the WebGL hero on real hardware and a Lighthouse audit.
+- Visual review of the animated hero on real phones and a Lighthouse audit.

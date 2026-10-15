@@ -65,7 +65,7 @@ Full matrix: `docs/SECURITY.md`.
 | Phase | Scope | Verification | Status |
 | --- | --- | --- | --- |
 | 1 | Plan, scaffold (Vite/React/TS/Tailwind v4), design tokens, UI primitives, tooling | typecheck, lint, build | Done |
-| 2 | Public website: 10 pages, responsive nav, footer, reveals/parallax, hero visual with WebGL + reduced-motion fallbacks | Playwright (desktop/tablet/mobile), axe | Done |
+| 2 | Public website: 10 pages, responsive nav, footer, reveals/parallax, animated “Village Dawn” hero with a reduced-motion still | Playwright (desktop/tablet/mobile), axe | Done |
 | 3 | Schema & migrations, RLS, roles, audit, storage policies; Docker-free local Supabase stack for tests | SQL/RLS tests per role through PostgREST | Done |
 | 4 | Assistance + volunteer workflows (public-api edge function, admin review) | function + DB tests, e2e | Done |
 | 5 | Villages, projects, outcomes, media consent/publishing, volunteer assignment | DB + e2e | Done |

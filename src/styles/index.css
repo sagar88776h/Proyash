@@ -288,6 +288,75 @@
     background-color: var(--color-gold-400);
   }
 
+  /* “Village Dawn” homepage backdrop (see VillageDawn.tsx) */
+  .dawn-sky {
+    background:
+      radial-gradient(55% 60% at 78% 30%, rgb(255 214 150 / 0.75), transparent 65%),
+      linear-gradient(180deg, #ffe8cc 0%, #fff3e3 42%, #eef8f1 78%, var(--color-mint-100) 100%);
+  }
+  .dawn-sun {
+    right: 12%;
+    top: 14%;
+    width: clamp(110px, 16vw, 210px);
+    aspect-ratio: 1;
+    border-radius: 9999px;
+    background: radial-gradient(circle, #ffd889 0 46%, rgb(255 190 110 / 0.55) 60%, transparent 71%);
+  }
+  .dawn-cloud-track {
+    height: 0;
+    transform: translateX(var(--cloud-rest, 30%));
+  }
+  .dawn-cloud-track:nth-child(4) {
+    --cloud-rest: 62%;
+  }
+  .dawn-cloud-track:nth-child(5) {
+    --cloud-rest: 8%;
+  }
+  .dawn-cloud-track:nth-child(6) {
+    --cloud-rest: 45%;
+  }
+  .dawn-cloud {
+    position: relative;
+    display: block;
+    height: 18px;
+    border-radius: 9999px;
+    background: rgb(255 255 255 / 0.9);
+  }
+  .dawn-cloud::before {
+    content: '';
+    position: absolute;
+    left: 22%;
+    top: -11px;
+    width: 42%;
+    height: 24px;
+    border-radius: 9999px;
+    background: inherit;
+  }
+  @media (max-width: 640px) {
+    .dawn-cloud-track:nth-child(n + 5) {
+      display: none;
+    }
+  }
+  .dawn-layer {
+    transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .dawn-sun {
+      animation:
+        dawn-rise 2.4s cubic-bezier(0.16, 1, 0.3, 1) both,
+        dawn-glow 7s ease-in-out 2.4s infinite alternate;
+    }
+    .dawn-cloud-track {
+      animation-name: dawn-drift;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+    .dawn-windows {
+      animation: dawn-windows 5s ease-in-out infinite alternate;
+    }
+  }
+
   /* Soft light-green wash used behind public page heroes */
   .bg-mesh {
     background-color: var(--color-mint-50);
@@ -303,6 +372,33 @@
       rgb(213 174 105 / 0.12) 0 12px,
       transparent 12px 24px
     );
+  }
+}
+
+@keyframes dawn-rise {
+  from {
+    transform: translateY(35%);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes dawn-glow {
+  to {
+    filter: brightness(1.08) saturate(1.15);
+  }
+}
+@keyframes dawn-drift {
+  from {
+    transform: translateX(-12%);
+  }
+  to {
+    transform: translateX(105%);
+  }
+}
+@keyframes dawn-windows {
+  to {
+    opacity: 0.65;
   }
 }
 

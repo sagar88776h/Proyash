@@ -72,14 +72,17 @@ Motion supports reading; it never blocks it.
 - **Reveal** (`framer-motion`, loaded lazily): short fade/rise as sections
   enter the viewport. Content is never hidden from print or from browsers that
   cannot run the animation.
-- **Hero**: a light Three.js “constellation” (people joining together),
-  loaded only on capable devices. It pauses when off-screen or when the tab is
-  hidden. A static SVG is used instead when the visitor prefers reduced motion,
-  on small screens, with Save-Data, or without WebGL.
+- **Hero — “Village Dawn”** (`src/components/visual/VillageDawn.tsx`): a
+  sunrise sky, slowly drifting clouds and layered SVG hills with village homes
+  whose windows glow softly. With a mouse, the hill layers shift slightly for
+  depth. It is pure CSS and SVG (no WebGL), pauses work while off-screen, and
+  shows a still landscape when the visitor prefers reduced motion. Inner pages
+  use a static hills strip at the bottom of their hero.
 - **GSAP ScrollTrigger** adds gentle parallax to the hero only, and only
   without reduced motion.
-- No autoplay audio or video, no scroll-jacking, no animations longer than
-  about a second.
+- No autoplay audio or video and no scroll-jacking. Entrance animations last
+  about a second; the only continuous motion is the hero’s slow ambient sky,
+  which never moves text.
 
 `prefers-reduced-motion: reduce` turns all of this off; the e2e suite checks
 that no content stays invisible and no canvas is created in that mode.
